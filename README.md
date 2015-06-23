@@ -16,4 +16,4 @@ For PIC32 file system support, please visit http://www.microchip.com/harmony.
 * src - the source files (.c) that make up implementation and any private interface files (.h) local to the library.
 * inc - the public interface files (.h)
 * doc - the compiled documentation how to use this library.
-* driver - physical layer driver examples for the fileio library.
+* drivers - physical layer driver examples for the fileio library.
