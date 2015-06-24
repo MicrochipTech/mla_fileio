@@ -1358,6 +1358,11 @@ void FILEIO_SD_SPISlowInitialize(FILEIO_SD_DRIVE_CONFIG * config)
             DRV_SPI_Initialize(config->index, &spiInitData);
 //    		OpenSPI(SPI_START_CFG_1, SPI_START_CFG_2);
     	#else //else C30 = PIC24/dsPIC devices
+            #if defined(DRV_SPI_CONFIG_V2_ENABLED)
+            spiInitData.cke = 0;
+            spiInitData.primaryPrescale = (SYS_CLK_FrequencyInstructionGet() / 400000 );
+            spiInitData.mode = SPI_TRANSFER_MODE_8BIT;
+            #else
             uint16_t spiconvalue = 0x0003;
             uint16_t timeout;
 
@@ -1394,6 +1399,8 @@ void FILEIO_SD_SPISlowInitialize(FILEIO_SD_DRIVE_CONFIG * config)
                 spiInitData.primaryPrescale = spiconvalue;
                 spiInitData.secondaryPrescale = (~timeout) & 0b111;
     	    }
+            #endif
+
             spiInitData.channel = config->index;
             DRV_SPI_Initialize(&spiInitData);
         #endif   //#ifdef __XC32__ (and corresponding #else)
@@ -1714,9 +1721,15 @@ FILEIO_MEDIA_INFORMATION *  FILEIO_SD_MediaInitialize (FILEIO_SD_DRIVE_CONFIG * 
             }
 //    		OpenSPI(SPI_START_CFG_1, SPI_START_CFG_2);
     	#else //else C30 = PIC24/dsPIC devices
-            spiInitData.cke = 0;
-            spiInitData.primaryPrescale = 2;
-            spiInitData.secondaryPrescale = 7;
+            #if defined(DRV_SPI_CONFIG_V2_ENABLED)
+                spiInitData.cke = 0;
+                spiInitData.primaryPrescale = 0;
+                spiInitData.mode = SPI_TRANSFER_MODE_8BIT;
+            #else
+                spiInitData.cke = 0;
+                spiInitData.primaryPrescale = 2;
+                spiInitData.secondaryPrescale = 7;
+            #endif
         #endif   //#ifdef __XC32__ (and corresponding #else)
     #else //must be PIC18 device
         spiInitData.cke = 0;
