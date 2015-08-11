@@ -24,9 +24,9 @@ please contact mla_licensing@microchip.com
 #include "fileio.h"
 #include "../src/fileio_private.h"
 #include "system.h"
-#include "driver/fileio/sd_spi.h"
-#include "driver/fileio/src/sd_spi_private.h"
-#include "driver/spi/drv_spi.h"
+#include "sd_spi.h"
+#include "sd_spi_private.h"
+
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -129,7 +129,7 @@ static inline __attribute__((always_inline)) unsigned char SPICalculateBRG(unsig
 
 bool FILEIO_SD_MediaDetect (FILEIO_SD_DRIVE_CONFIG * config)
 {
-    #ifndef MEDIA_SOFT_DETECT
+    #ifndef FILEIO_SD_CONFIG_MEDIA_SOFT_DETECT
         return (*config->cdFunc)();
     #else
         FILEIO_SD_RESPONSE    response;
@@ -162,7 +162,7 @@ bool FILEIO_SD_MediaDetect (FILEIO_SD_DRIVE_CONFIG * config)
                 //minimizing risk of SPI clock pulse master/slave synchronization problems,
                 //due to possible application noise on the SCK line.
                 (*config->csFunc)(1);       //De-select card
-                FILEIO_SD_SendCmdSlow(config, 0xFF, 0);   //Send some "extraneous" clock pulses.  If a previous
+                FILEIO_SD_SPI_Put_Slow(config->index, 0xFF);   //Send some "extraneous" clock pulses.  If a previous
                                       //command was terminated before it completed normally,
                                       //the card might not have received the required clocking
                                       //following the transfer.

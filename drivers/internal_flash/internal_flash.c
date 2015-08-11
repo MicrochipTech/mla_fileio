@@ -22,7 +22,7 @@ please contact mla_licensing@microchip.com
 #include "string.h"
 #include <fileio_config.h>
 #include <fileio.h>
-#include <driver/fileio/internal_flash.h>
+#include <internal_flash.h>
 
 #include <stdint.h>
 #include <stdbool.h>
