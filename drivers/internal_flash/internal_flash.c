@@ -676,23 +676,23 @@ void EraseBlock(const uint8_t* dest)
 }
 
 
-//------------------------------------------------------------------------------
-#if defined(__XC16__)
-    #pragma message "Double click this message and read inline code comments.  For production designs, recommend adding application specific robustness features here."
-#else
-    #warning "Double click this message and read inline code comments.  For production designs, recommend adding application specific robustness features here."
+
+#ifndef DRV_FILEIO_INTERNAL_FLASH_CONFIG_UNLOCK_VERIFICATION_FUNCTION
+    #error "User must define the DRV_FILEIO_INTERNAL_FLASH_CONFIG_UNLOCK_VERIFICATION_FUNCTION macro in the fileio_config.h file.  Click this message for more details in comments."
+    /* The DRV_FILEIO_INTERNAL_FLASH_CONFIG_UNLOCK_VERIFICATION_FUNCTION macro
+     * is used to verify that the system is in a condition where a self write 
+     * is valid.  This could include checks for system voltage levels, clocking
+     * vs voltage, address checking for write locations, etc.  The prototype of
+     * the function that this micro should point to is the following:
+     *   bool functionName(void);
+     * The functions should return true if the self write is allowed and false
+     * if the self write is not allowed. 
+     */
 #endif
-//Function: void UnlockAndActivate(uint8_t UnlockKey)
-//Description: Activates and initiates a flash memory self erase or program 
-//operation.  Useful for writing to the MSD drive volume.
-//Note: Self erase/writes to flash memory could potentially corrupt the
-//firmware of the application, if the unlock sequence is ever executed
-//unintentionally, or if the table pointer is pointing to an invalid
-//range (not inside the MSD volume range).  Therefore, in order to ensure
-//a fully reliable design that is suitable for mass production, it is strongly
-//recommended to implement several robustness checks prior to actually
-//performing any self erase/program unlock sequence.  See additional inline 
-//code comments.
+
+bool DRV_FILEIO_INTERNAL_FLASH_CONFIG_UNLOCK_VERIFICATION_FUNCTION(void);
+    
+
 //------------------------------------------------------------------------------
 void UnlockAndActivate(uint8_t UnlockKey)
 {
@@ -700,50 +700,10 @@ void UnlockAndActivate(uint8_t UnlockKey)
         uint8_t InterruptEnableSave;
     #endif
       
-    //Should verify that the voltage on Vdd/Vddcore is high enough to meet
-    //the datasheet minimum voltage vs. frequency graph for the device.
-    //If the microcontroller is "overclocked" (ex: by running at maximum rated
-    //frequency, but then not suppling enough voltage to meet the datasheet
-    //voltage vs. frequency graph), errant code execution could occur.  It is
-    //therefore strongly recommended to check the voltage prior to performing a 
-    //flash self erase/write unlock sequence.  If the voltage is too low to meet
-    //the voltage vs. frequency graph in the datasheet, the firmware should not 
-    //inititate a self erase/program operation, and instead it should either:
-    //1.  Clock switch to a lower frequency that does meet the voltage/frequency graph.  Or,
-    //2.  Put the microcontroller to Sleep mode.
-    
-    //The method used to measure Vdd and/or Vddcore will depend upon the 
-    //microcontroller model and the module features available in the device, but
-    //several options are available on many of the microcontrollers, ex:
-    //1.  HLVD module
-    //2.  WDTCON<LVDSTAT> indicator bit
-    //3.  Perform ADC operation, with the VBG channel selected, using Vdd/Vss as 
-    //      references to the ADC.  Then perform math operations to calculate the Vdd.
-    //      On some micros, the ADC can also measure the Vddcore voltage, allowing
-    //      the firmware to calculate the absolute Vddcore voltage, if it has already
-    //      calculated and knows the ADC reference voltage.
-    //4.  Use integrated general purpose comparator(s) to sense Vdd/Vddcore voltage
-    //      is above proper threshold.
-    //5.  If the micrcontroller implements a user adjustable BOR circuit, enable
-    //      it and set the trip point high enough to avoid overclocking altogether.
-    
-    //Example psuedo code.  Exact implementation will be application specific.
-    //Please implement appropriate code that best meets your application requirements.
-    //if(GetVddcoreVoltage() < MIN_ALLOWED_VOLTAGE)
-    //{
-    //    ClockSwitchToSafeFrequencyForGivenVoltage();    //Or even better, go to sleep mode.
-    //    return;       
-    //}    
-
-
-    //Should also verify the TBLPTR is pointing to a valid range (part of the MSD
-    //volume, and not a part of the application firmware space).
-    //Example code for PIC18 (commented out since the actual address range is 
-    //application specific):
-    //if((TBLPTR > MSD_VOLUME_MAX_ADDRESS) || (TBLPTR < MSD_VOLUME_START_ADDRESS)) 
-    //{
-    //    return;
-    //}  
+    if(DRV_FILEIO_INTERNAL_FLASH_CONFIG_UNLOCK_VERIFICATION_FUNCTION() == false)
+    {
+        return;
+    }
     
     //Verify the UnlockKey is the correct value, to make sure this function is 
     //getting executed intentionally, from a calling function that knew it

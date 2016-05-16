@@ -21,6 +21,7 @@ please contact mla_licensing@microchip.com
 
 #include "fileio_config.h"
 #include <fileio.h>
+#include <fileio_media.h>
 
 uint8_t FILEIO_InternalFlash_MediaDetect(void* config);
 FILEIO_MEDIA_INFORMATION * FILEIO_InternalFlash_MediaInitialize(void* config);

@@ -19,7 +19,7 @@ please contact mla_licensing@microchip.com
 *******************************************************************************/
 //DOM-IGNORE-END
 
-#include <system_config.h>
+#include <fileio_config.h>
 #include <system.h>
 #include <fileio.h>
 #include "fileio_private.h"
@@ -798,7 +798,6 @@ void FILEIO_FormatShortFileName (const char * fileName, FILEIO_OBJECT * filePtr)
     }
 }
 
-
 int FILEIO_Open (FILEIO_OBJECT * filePtr, const char * fileName, uint16_t mode)
 {
     FILEIO_ERROR_TYPE error;
@@ -811,11 +810,11 @@ int FILEIO_Open (FILEIO_OBJECT * filePtr, const char * fileName, uint16_t mode)
     uint16_t currentClusterOffset = 0;
 
     fileName = FILEIO_CacheDirectory (&directory, fileName, false);
-
+   
     if (fileName == NULL)
     {
         return FILEIO_RESULT_FAILURE;
-    }
+    }  
     
     currentCluster = directory.cluster;
 
@@ -939,7 +938,7 @@ int FILEIO_Open (FILEIO_OBJECT * filePtr, const char * fileName, uint16_t mode)
         }
     }
 
-    // Check to ensure no errors occured
+    // Check to ensure no errors occurred
     if (error != FILEIO_ERROR_NONE)
     {
         directory.drive->error = error;
@@ -1061,7 +1060,7 @@ const char * FILEIO_CacheDirectory (FILEIO_DIRECTORY * dir, const char * path, b
 #endif
 
     // Find the next forward slash (indicates part of the path is a directory)
-    while ((i = FILEIO_FindNextDelimiter(path)) != -1)
+    while ((i = FILEIO_FindNextDelimiter(path)) != ((uint16_t)-1))
     {
         // If someone terminated a directory path with a delimiter, break out of the loop
         if (*(path + i) == FILEIO_CONFIG_DELIMITER)
@@ -1126,7 +1125,7 @@ uint16_t FILEIO_FindNextDelimiter(const char * path)
 
     if (c == 0)
     {
-        return -1;
+        return ((uint16_t)-1);
     }
     else
     {
