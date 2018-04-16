@@ -26,7 +26,7 @@ please contact mla_licensing@microchip.com
 #include <stdbool.h>
 #include <fileio.h>
 
-// Private search paramters
+// Private search parameters
 typedef enum
 {
     FILEIO_SEARCH_ENTRY_EMPTY = 0x01,
@@ -57,10 +57,10 @@ typedef enum
 #define FILEIO_FIXED_ROOT_DIRECTORY_CLUSTER_NUMBER      0   // Value of the root directory cluster for non-FAT32 file systems
 
 #define FILEIO_CLUSTER_VALUE_EMPTY          0x0000          // FAT entry for an empty cluster
-#define FILEIO_CLUSTER_VALUE_FAT12_EOF      0xff8           // End-of-file cluster value for FAT12
+#define FILEIO_CLUSTER_VALUE_FAT12_EOF      0xfff           // End-of-file cluster value for FAT12
 #define FILEIO_CLUSTER_VALUE_FAT16_EOF      0xfff8          // End-of-file cluster value for FAT16
 #define FILEIO_CLUSTER_VALUE_FAT32_EOF      0x0ffffff8      // End-of-file cluster value for FAT32
-#define FILEIO_CLUSTER_VALUE_FAT12_FAIL     0xfff           // Return value indicating failure for FAT12
+#define FILEIO_CLUSTER_VALUE_FAT12_FAIL     0xffff          // Return value indicating failure for FAT12
 #define FILEIO_CLUSTER_VALUE_FAT16_FAIL     0xffff          // Return value indicating failure for FAT16
 #define FILEIO_CLUSTER_VALUE_FAT32_FAIL     0x0fffffff      // Return value indicating failure for FAT32
 #define FILEIO_CLUSTER_VALUE_FAT12_END      0xff7           // Comparison value to determine if the firmware has reached the last allocatable cluster for FAT12
@@ -105,7 +105,7 @@ typedef struct
     uint8_t     sectorsPerCluster;          // The number of sectors per cluster in the data region
     uint8_t     type;                       // The file system type of the partition (FAT12, FAT16 or FAT32)
     uint8_t     mount;                      // Device mount flag (true if disk was mounted successfully, false otherwise)
-    uint8_t     error;                      // Last error that occured for this drive
+    uint8_t     error;                      // Last error that occurred for this drive
     char        driveId;
 #if defined __XC32__ || defined __XC16__
 } __attribute__ ((packed)) FILEIO_DRIVE;

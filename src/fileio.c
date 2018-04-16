@@ -2422,6 +2422,8 @@ uint32_t FILEIO_FATWrite (FILEIO_DRIVE *disk, uint32_t currentCluster, uint32_t 
         }
         else if (disk->type == FILEIO_FILE_SYSTEM_TYPE_FAT12)
         {
+            statusPtr->flags.fatBufferNeedsWrite = true;
+            
             // Get the current uint8_t from the FAT
             c = *(disk->fatBuffer + p);
             if (q)
