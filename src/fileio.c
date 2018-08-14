@@ -3357,7 +3357,7 @@ int FILEIO_DirectoryRemove (const char * path)
         {
             return FILEIO_RESULT_FAILURE;
         }
-    } while ((entry->name[0] != FILEIO_DIRECTORY_ENTRY_EMPTY) && ((uint8_t)(entry->name[0]) != FILEIO_DIRECTORY_ENTRY_DELETED));
+    } while ((entry->name[0] != FILEIO_DIRECTORY_ENTRY_EMPTY) );
 
     return FILEIO_DirectoryRemoveSingle (&directory, finalPath);
 }
