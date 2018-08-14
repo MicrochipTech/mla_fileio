@@ -2892,7 +2892,9 @@ size_t FILEIO_Write (const void * buffer, size_t size, size_t count, FILEIO_OBJE
         length -= writeCount;
     }
 
-    filePtr->size += dataWritten;
+    if((filePtr->currentOffset + dataWritten) > (filePtr->size - 1)) {
+        filePtr->size += dataWritten;
+    }
     filePtr->absoluteOffset += dataWritten;
 
     return dataWritten;
@@ -3355,7 +3357,7 @@ int FILEIO_DirectoryRemove (const char * path)
         {
             return FILEIO_RESULT_FAILURE;
         }
-    } while (entry->name[0] != FILEIO_DIRECTORY_ENTRY_EMPTY);
+    } while ((entry->name[0] != FILEIO_DIRECTORY_ENTRY_EMPTY) && ((uint8_t)(entry->name[0]) != FILEIO_DIRECTORY_ENTRY_DELETED));
 
     return FILEIO_DirectoryRemoveSingle (&directory, finalPath);
 }
