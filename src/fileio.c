@@ -3345,7 +3345,7 @@ int FILEIO_DirectoryRemove (const char * path)
     currentCluster = deletedDirectory.cluster;
     do
     {
-        entry = FILEIO_DirectoryEntryCache (&deletedDirectory, &error, &currentCluster, &currentClusterOffset, entryOffset);
+        entry = FILEIO_DirectoryEntryCache (&deletedDirectory, &error, &currentCluster, &currentClusterOffset, entryOffset++);
         if (entry == NULL)
         {
             return FILEIO_RESULT_FAILURE;
