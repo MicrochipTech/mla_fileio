@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>emulated_disk.h</itemPath>
+      <itemPath>../../inc/fileio.h</itemPath>
+      <itemPath>fileio_config.h</itemPath>
+      <itemPath>../../inc/fileio_media.h</itemPath>
+      <itemPath>../../src/fileio_private.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <logicalFolder name="f1" displayName="drives" projectFiles="true">
+        <itemPath>DRV001.c</itemPath>
+        <itemPath>DRV002.c</itemPath>
+        <itemPath>DRV003.c</itemPath>
+        <itemPath>DRV004.c</itemPath>
+        <itemPath>DRV005.c</itemPath>
+        <itemPath>DRV006.c</itemPath>
+        <itemPath>DRV007.c</itemPath>
+        <itemPath>DRV008.c</itemPath>
+        <itemPath>DRV009.c</itemPath>
+        <itemPath>DRV010.c</itemPath>
+        <itemPath>DRV011.c</itemPath>
+        <itemPath>DRV012.c</itemPath>
+        <itemPath>DRV013.c</itemPath>
+        <itemPath>DRV014.c</itemPath>
+        <itemPath>DRV015.c</itemPath>
+        <itemPath>DRV016.c</itemPath>
+        <itemPath>DRV017.c</itemPath>
+        <itemPath>DRV018.c</itemPath>
+        <itemPath>DRV019.c</itemPath>
+        <itemPath>DRV021.c</itemPath>
+        <itemPath>DRV022.c</itemPath>
+        <itemPath>DRV023.c</itemPath>
+        <itemPath>DRV024.c</itemPath>
+        <itemPath>DRV025.c</itemPath>
+        <itemPath>DRV026.c</itemPath>
+        <itemPath>DRV027.c</itemPath>
+        <itemPath>DRV028.c</itemPath>
+        <itemPath>DRV029.c</itemPath>
+        <itemPath>DRV030.c</itemPath>
+        <itemPath>DRV031.c</itemPath>
+        <itemPath>DRV032.c</itemPath>
+        <itemPath>DRV033.c</itemPath>
+        <itemPath>DRV034.c</itemPath>
+        <itemPath>DRV035.c</itemPath>
+        <itemPath>DRV036.c</itemPath>
+        <itemPath>DRV037.c</itemPath>
+        <itemPath>DRV039.c</itemPath>
+        <itemPath>DRV040.c</itemPath>
+        <itemPath>DRV041.c</itemPath>
+        <itemPath>DRV042.c</itemPath>
+        <itemPath>DRV043.c</itemPath>
+        <itemPath>DRV044.c</itemPath>
+        <itemPath>DRV045.c</itemPath>
+        <itemPath>DRV046.c</itemPath>
+        <itemPath>DRV047.c</itemPath>
+        <itemPath>DRV048.c</itemPath>
+        <itemPath>DRV049.c</itemPath>
+        <itemPath>DRV050.c</itemPath>
+        <itemPath>DRV051.c</itemPath>
+        <itemPath>DRV052.c</itemPath>
+        <itemPath>DRV053.c</itemPath>
+        <itemPath>DRV054.c</itemPath>
+        <itemPath>DRV055.c</itemPath>
+        <itemPath>DRV056.c</itemPath>
+        <itemPath>DRV057.c</itemPath>
+        <itemPath>DRV058.c</itemPath>
+        <itemPath>DRV059.c</itemPath>
+        <itemPath>DRV060.c</itemPath>
+        <itemPath>DRV061.c</itemPath>
+        <itemPath>DRV062.c</itemPath>
+        <itemPath>DRV063.c</itemPath>
+        <itemPath>DRV064.c</itemPath>
+        <itemPath>DRV065.c</itemPath>
+        <itemPath>DRV066.c</itemPath>
+        <itemPath>DRV067.c</itemPath>
+        <itemPath>DRV068.c</itemPath>
+        <itemPath>DRV069.c</itemPath>
+        <itemPath>DRV070.c</itemPath>
+        <itemPath>DRV071.c</itemPath>
+        <itemPath>DRV072.c</itemPath>
+        <itemPath>DRV073.c</itemPath>
+        <itemPath>DRV074.c</itemPath>
+        <itemPath>DRV075.c</itemPath>
+        <itemPath>DRV076.c</itemPath>
+        <itemPath>DRV077.c</itemPath>
+        <itemPath>DRV078.c</itemPath>
+        <itemPath>DRV079.c</itemPath>
+        <itemPath>DRV080.c</itemPath>
+        <itemPath>DRV081.c</itemPath>
+        <itemPath>DRV082.c</itemPath>
+        <itemPath>DRV083.c</itemPath>
+        <itemPath>DRV084.c</itemPath>
+        <itemPath>DRV085.c</itemPath>
+        <itemPath>DRV086.c</itemPath>
+        <itemPath>DRV087.c</itemPath>
+        <itemPath>DRV088.c</itemPath>
+        <itemPath>DRV089.c</itemPath>
+        <itemPath>DRV091.c</itemPath>
+        <itemPath>DRV093.c</itemPath>
+        <itemPath>DRV094.c</itemPath>
+        <itemPath>DRV095.c</itemPath>
+        <itemPath>DRV096.c</itemPath>
+        <itemPath>DRV097.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2" displayName="fileio" projectFiles="true">
+        <itemPath>../../src/fileio.c</itemPath>
+      </logicalFolder>
+      <itemPath>emulated_disk.c</itemPath>
+      <itemPath>functional_tests.c</itemPath>
+      <itemPath>main.c</itemPath>
+      <itemPath>mounting_tests.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>Cygwin|Cygwin</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <standard>3</standard>
+          <incDir>
+            <pElem>../../src</pElem>
+            <pElem>../../inc</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+      </compileType>
+      <item path="../../inc/fileio.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../inc/fileio_media.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../src/fileio.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../src/fileio_private.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="DRV001.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV002.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV003.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV004.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV005.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV006.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV007.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV008.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV009.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV010.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV011.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV012.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV013.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV014.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV015.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV016.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV017.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV018.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV019.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV021.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV022.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV023.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV024.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV025.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV026.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV027.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV028.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV029.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV030.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV031.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV032.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV033.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV034.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV035.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV036.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV037.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV039.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV040.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV041.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV042.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV043.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV044.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV045.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV046.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV047.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV048.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV049.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV050.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV051.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV052.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV053.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV054.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV055.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV056.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV057.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV058.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV059.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV060.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV061.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV062.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV063.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV064.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV065.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV066.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV067.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV068.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV069.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV070.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV071.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV072.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV073.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV074.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV075.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV076.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV077.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV078.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV079.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV080.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV081.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV082.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV083.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV084.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV085.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV086.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV087.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV088.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV089.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV091.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV093.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV094.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV095.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV096.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV097.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="emulated_disk.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="emulated_disk.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <folder path="SourceFiles">
+        <ccTool>
+          <incDir>
+            <pElem>fatfs</pElem>
+          </incDir>
+        </ccTool>
+      </folder>
+      <item path="fileio_config.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="functional_tests.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="main.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="mounting_tests.c" ex="false" tool="0" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <standard>3</standard>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="../../inc/fileio.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../inc/fileio_media.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../src/fileio.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../src/fileio_private.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="DRV001.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV002.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV003.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV004.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV005.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV006.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV007.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV008.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV009.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV010.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV011.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV012.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV013.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV014.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV015.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV016.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV017.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV018.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV019.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV021.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV022.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV023.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV024.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV025.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV026.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV027.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV028.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV029.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV030.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV031.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV032.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV033.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV034.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV035.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV036.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV037.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV039.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV040.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV041.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV042.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV043.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV044.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV045.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV046.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV047.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV048.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV049.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV050.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV051.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV052.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV053.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV054.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV055.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV056.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV057.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV058.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV059.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV060.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV061.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV062.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV063.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV064.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV065.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV066.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV067.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV068.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV069.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV070.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV071.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV072.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV073.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV074.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV075.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV076.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV077.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV078.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV079.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV080.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV081.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV082.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV083.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV084.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV085.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV086.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV087.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV088.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV089.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV091.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV093.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV094.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV095.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV096.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV097.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="emulated_disk.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="emulated_disk.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="fileio_config.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="functional_tests.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="main.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="mounting_tests.c" ex="false" tool="0" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

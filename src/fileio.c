@@ -275,19 +275,11 @@ FILEIO_ERROR_TYPE FILEIO_LoadMBR (FILEIO_DRIVE * drive)
          // Technically, the OEM name is not for indication
          // The alternative is to read the CIS from attribute
          // memory.  See the PCMCIA metaformat for more details
-/*    #if defined (__XC16__) || defined (__XC32__)
-            if ((*(drive->dataBuffer + BSI_FSTYPE) == 'F') && \
-                (*(drive->dataBuffer + BSI_FSTYPE + 1) == 'A') && \
-                (*(drive->dataBuffer + BSI_FSTYPE + 2) == 'T') && \
-                (*(drive->dataBuffer + BSI_FSTYPE + 3) == '1') && \
-                (*(drive->dataBuffer + BSI_BOOTSIG) == 0x29))
-#else*/
             if ((ptrBootSector->biosParameterBlock.fat16.fileSystemType[0] == 'F') && \
                 (ptrBootSector->biosParameterBlock.fat16.fileSystemType[1] == 'A') && \
                 (ptrBootSector->biosParameterBlock.fat16.fileSystemType[2] == 'T') && \
                 (ptrBootSector->biosParameterBlock.fat16.fileSystemType[3] == '1') && \
                 (ptrBootSector->biosParameterBlock.fat16.bootSignature == 0x29))
-//    #endif
              {
                 drive->firstPartitionSector = 0;
                 drive->type = FILEIO_FILE_SYSTEM_TYPE_FAT16;
@@ -295,7 +287,7 @@ FILEIO_ERROR_TYPE FILEIO_LoadMBR (FILEIO_DRIVE * drive)
              }
              else
              {
-#if defined (__XC16__) || defined (__XC32__)
+#if !defined (__XC8__)
                 if ((*(drive->dataBuffer + BSI_FAT32_FSTYPE ) == 'F') && \
                     (*(drive->dataBuffer + BSI_FAT32_FSTYPE + 1 ) == 'A') && \
                     (*(drive->dataBuffer + BSI_FAT32_FSTYPE + 2 ) == 'T') && \
@@ -2703,13 +2695,13 @@ int FILEIO_Seek(FILEIO_OBJECT * filePtr, int32_t offset, int whence)
     }
     else
     {
-        // set the new postion
+        // set the new position
         filePtr->absoluteOffset = offset2;
 
         // figure out how many sectors
         numsector = offset2 / disk->sectorSize;
 
-        // figure out how many uint8_ts off of the offset
+        // figure out how many bytes off of the offset
         offset2 = offset2 - (numsector * disk->sectorSize);
         filePtr->currentOffset = offset2;
 
@@ -2892,9 +2884,7 @@ size_t FILEIO_Write (const void * buffer, size_t size, size_t count, FILEIO_OBJE
         length -= writeCount;
     }
 
-    if((filePtr->currentOffset + dataWritten) > (filePtr->size - 1)) {
-        filePtr->size += dataWritten;
-    }
+    filePtr->size += dataWritten;
     filePtr->absoluteOffset += dataWritten;
 
     return dataWritten;
@@ -3939,7 +3929,7 @@ int FILEIO_Format (FILEIO_DRIVE_CONFIG * config, void * mediaParameters, FILEIO_
         // Technically, the OEM name is not for indication
         // The alternative is to read the CIS from attribute
         // memory.  See the PCMCIA metaformat for more details
-#if defined (__XC16__) || defined (__XC32__)
+#if !defined (__XC8__)
         if ((*(disk->dataBuffer + BSI_FSTYPE ) == 'F') && \
             (*(disk->dataBuffer + BSI_FSTYPE + 1 ) == 'A') && \
             (*(disk->dataBuffer + BSI_FSTYPE + 2 ) == 'T') && \

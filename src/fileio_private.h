@@ -26,6 +26,12 @@ please contact mla_licensing@microchip.com
 #include <stdbool.h>
 #include <fileio.h>
 
+#if defined __XC8__
+#define PACKED
+#else
+#define PACKED __attribute__((packed))
+#endif
+
 // Private search parameters
 typedef enum
 {
@@ -107,11 +113,7 @@ typedef struct
     uint8_t     mount;                      // Device mount flag (true if disk was mounted successfully, false otherwise)
     uint8_t     error;                      // Last error that occurred for this drive
     char        driveId;
-#if defined __XC32__ || defined __XC16__
-} __attribute__ ((packed)) FILEIO_DRIVE;
-#else
-} FILEIO_DRIVE;
-#endif
+} PACKED FILEIO_DRIVE;
 
 typedef struct
 {
@@ -171,11 +173,7 @@ typedef struct {
     uint8_t volumeId[4];                    // Volume ID
     uint8_t volLabel[11];                   // Volume Label
     uint8_t fileSystemType[8];              // File system type in ASCII. Not used for determination
-#if defined __XC32__ || defined __XC16__
-} __attribute__ ((packed)) FILEIO_BIOS_PARAMETER_BLOCK_FAT12;
-#else
-} FILEIO_BIOS_PARAMETER_BLOCK_FAT12;
-#endif
+} PACKED FILEIO_BIOS_PARAMETER_BLOCK_FAT12;
 
 // BIOS Parameter Block for a FAT16 partition
 typedef struct {
@@ -199,11 +197,7 @@ typedef struct {
     uint8_t volumeId[4];                    // Volume ID
     uint8_t volumeLabel[11];                // Volume Label
     uint8_t fileSystemType[8];              // File system type in ASCII. Not used for determination
-#if defined __XC32__ || defined __XC16__
-} __attribute__ ((packed)) FILEIO_BIOS_PARAMETER_BLOCK_FAT16;
-#else
-} FILEIO_BIOS_PARAMETER_BLOCK_FAT16;
-#endif
+} PACKED FILEIO_BIOS_PARAMETER_BLOCK_FAT16;
 
 // BIOS Parameter Block for a FAT32 parition
 typedef struct {
@@ -234,11 +228,7 @@ typedef struct {
     uint8_t  volumeId[4];                   // Volume ID
     uint8_t  volumeLabel[11];               // Volume Label
     uint8_t  fileSystemType[8];             // File system type in ASCII.  Not used for determination
-#if defined __XC32__ || defined __XC16__
-} __attribute__ ((packed)) FILEIO_BIOS_PARAMETER_BLOCK_FAT32;
-#else
-} FILEIO_BIOS_PARAMETER_BLOCK_FAT32;
-#endif
+} PACKED FILEIO_BIOS_PARAMETER_BLOCK_FAT32;
 
 
 // A macro for the boot sector uint8_ts per sector value offset
@@ -280,11 +270,8 @@ typedef struct
     uint8_t chsLastPartitionSector[3];      // The cylinder-head-sector address of the last sector of the partition
     uint32_t lbaFirstSector;                // The logical block address of the first sector of the partition
     uint32_t sectorCount;                   // The number of sectors in a partition
-#if defined __XC32__ || defined __XC16__
-} __attribute__ ((packed)) FILEIO_MBR_PARTITION_TABLE_ENTRY;
-#else
-} FILEIO_MBR_PARTITION_TABLE_ENTRY;
-#endif
+} PACKED FILEIO_MBR_PARTITION_TABLE_ENTRY;
+
 
 // Strucure of a device's master boot record
 typedef struct
@@ -296,11 +283,7 @@ typedef struct
     FILEIO_MBR_PARTITION_TABLE_ENTRY partition3;    // The fourth partition table entry
     uint8_t signature0;                             // MBR signature code - equal to 0x55
     uint8_t signature1;                             // MBR signature code - equal to 0xAA
-#if defined __XC32__ || defined __XC16__
-}__attribute__((packed)) FILEIO_MASTER_BOOT_RECORD;
-#else
-} FILEIO_MASTER_BOOT_RECORD;
-#endif
+} PACKED FILEIO_MASTER_BOOT_RECORD;
 
 // Structure matching the configuration of a FAT boot sector
 typedef struct
@@ -315,11 +298,7 @@ typedef struct
     uint8_t reserved[512-sizeof(FILEIO_BIOS_PARAMETER_BLOCK_FAT32)-2];      // Reserved space
     uint8_t signature0;                                                     // Boot sector signature code - equal to 0x55
     uint8_t signature1;                                                     // Boot sector signature code - equal to 0xAA
-#if defined __XC32__ || defined __XC16__
-    } __attribute__ ((packed)) FILEIO_BOOT_SECTOR;
-#else
-    } FILEIO_BOOT_SECTOR;
-#endif
+    } PACKED FILEIO_BOOT_SECTOR;
 
 
 
