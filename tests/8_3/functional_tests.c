@@ -5,17 +5,15 @@
 
 #include "fileio.h"
 #include "emulated_disk.h"
-
-#define TEST_DRIVE DRV096
+#include "drive_list.h"
 
 extern FILEIO_DRIVE_CONFIG EmulatedDisk;
-extern struct EMULATED_DRIVE TEST_DRIVE;
 
-bool TestSetup(void){
+bool TestSetup(struct EMULATED_DRIVE *test_drive){
     const char name[] = "TestSetup";
     
     if(FILEIO_Initialize() != true) {printf("TEST FAILED: %s\r\n", name); return false;}
-    if(FILEIO_DriveMount ('A', &EmulatedDisk, (void*)&TEST_DRIVE) != FILEIO_ERROR_NONE){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_DriveMount ('A', &EmulatedDisk, (void*)test_drive) != FILEIO_ERROR_NONE){printf("TEST FAILED: %s\r\n", name); return false;}
     
     return true;
 }
@@ -244,10 +242,11 @@ void RunFunctionalTests(void){
     int test_index;
     uint32_t passed;
     const uint32_t test_count = (sizeof(tests)/sizeof(TEST_FUNCTION));
+    struct EMULATED_DRIVE *drive = &DRV096; 
            
     passed = 0;
     for(test_index=0; test_index < (sizeof(tests)/sizeof(TEST_FUNCTION)); test_index++){
-        if(TestSetup() == true){
+        if(TestSetup(drive) == true){
             passed += tests[test_index]();
             TestTearDown();
         }

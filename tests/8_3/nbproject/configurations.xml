@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>drive_list.h</itemPath>
       <itemPath>emulated_disk.h</itemPath>
       <itemPath>../../inc/fileio.h</itemPath>
       <itemPath>fileio_config.h</itemPath>
@@ -344,6 +345,8 @@
       </item>
       <item path="DRV097.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="drive_list.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="emulated_disk.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="emulated_disk.h" ex="false" tool="3" flavor2="0">
@@ -578,6 +581,8 @@
       <item path="DRV096.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="DRV097.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="drive_list.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="emulated_disk.c" ex="false" tool="0" flavor2="0">
       </item>
