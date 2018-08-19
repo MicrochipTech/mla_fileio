@@ -2883,9 +2883,20 @@ size_t FILEIO_Write (const void * buffer, size_t size, size_t count, FILEIO_OBJE
         dataWritten += writeCount;
         length -= writeCount;
     }
-
-    filePtr->size += dataWritten;
+        
+    if(filePtr->size == 0) {
+        filePtr->size += dataWritten;
+    } else {
+        uint32_t new_offset = filePtr->absoluteOffset + dataWritten;
+        if (new_offset > (filePtr->size)) {
+            filePtr->size += new_offset - filePtr->size;
+        }
+    }
+    
     filePtr->absoluteOffset += dataWritten;
+    
+    
+    
 
     return dataWritten;
 }

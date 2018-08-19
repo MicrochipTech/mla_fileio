@@ -158,6 +158,74 @@ bool SeekEnd(void){
     return true;
 }
 
+bool SeekAndWriteNotPassingEnd(void){ 
+    const char name[] = "SeekAndWriteNotPassingEnd";
+    FILEIO_OBJECT myFile;
+    
+    if(FILEIO_Open(&myFile, "TEST.TXT", FILEIO_OPEN_WRITE | FILEIO_OPEN_READ | FILEIO_OPEN_CREATE | FILEIO_OPEN_TRUNCATE) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Write("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1, 26, &myFile) != 26) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Seek(&myFile, 1, FILEIO_SEEK_SET) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Write("X", 1, 1, &myFile) != 1){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;}    
+    if(myFile.size != 26){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Open(&myFile, "TEST.TXT", FILEIO_OPEN_WRITE | FILEIO_OPEN_READ | FILEIO_OPEN_CREATE) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Seek(&myFile, 1, FILEIO_SEEK_SET) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_GetChar(&myFile) != 'X') {printf("TEST FAILED: %s\r\n", name); return false;}
+    return true;
+}
+
+bool SeekAndWriteAtEnd(void){ 
+    const char name[] = "SeekAndWriteAtEnd";
+    FILEIO_OBJECT myFile;
+    
+    if(FILEIO_Open(&myFile, "TEST.TXT", FILEIO_OPEN_WRITE | FILEIO_OPEN_READ | FILEIO_OPEN_CREATE | FILEIO_OPEN_TRUNCATE) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Write("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1, 26, &myFile) != 26) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Seek(&myFile, 25, FILEIO_SEEK_SET) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Write("X", 1, 1, &myFile) != 1){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;}    
+    if(myFile.size != 26){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Open(&myFile, "TEST.TXT", FILEIO_OPEN_WRITE | FILEIO_OPEN_READ | FILEIO_OPEN_CREATE) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Seek(&myFile, 25, FILEIO_SEEK_SET) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_GetChar(&myFile) != 'X') {printf("TEST FAILED: %s\r\n", name); return false;}
+
+    return true;
+}
+
+
+bool SeekAndWritePastEnd(void){ 
+    const char name[] = "SeekAndWritePastEnd";
+    FILEIO_OBJECT myFile;
+    
+    if(FILEIO_Open(&myFile, "TEST.TXT", FILEIO_OPEN_WRITE | FILEIO_OPEN_READ | FILEIO_OPEN_CREATE | FILEIO_OPEN_TRUNCATE) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Write("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1, 26, &myFile) != 26) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Seek(&myFile, 25, FILEIO_SEEK_SET) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Write("12", 1, 2, &myFile) != 2){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;}    
+    if(myFile.size != 27){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Open(&myFile, "TEST.TXT", FILEIO_OPEN_WRITE | FILEIO_OPEN_READ | FILEIO_OPEN_CREATE) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Seek(&myFile, 26, FILEIO_SEEK_SET) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_GetChar(&myFile) != '2') {printf("TEST FAILED: %s\r\n", name); return false;}
+
+    return true;
+}
+
+bool SeekAndWritePastEnd_2(void){ 
+    const char name[] = "SeekAndWritePastEnd_2";
+    FILEIO_OBJECT myFile;
+    
+    if(FILEIO_Open(&myFile, "TEST.TXT", FILEIO_OPEN_WRITE | FILEIO_OPEN_READ | FILEIO_OPEN_CREATE | FILEIO_OPEN_TRUNCATE) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Write("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1, 26, &myFile) != 26) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Seek(&myFile, 25, FILEIO_SEEK_SET) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Write("123", 1, 3, &myFile) != 3){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;}    
+    if(myFile.size != 28){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Open(&myFile, "TEST.TXT", FILEIO_OPEN_WRITE | FILEIO_OPEN_READ | FILEIO_OPEN_CREATE) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Seek(&myFile, 27, FILEIO_SEEK_SET) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_GetChar(&myFile) != '3') {printf("TEST FAILED: %s\r\n", name); return false;}
+
+    return true;
+}
+
 bool CreateMultipleDirectoriesAtOnce(void){ 
     const char name[] = "CreateMultipleDirectoriesAtOnce";
     
