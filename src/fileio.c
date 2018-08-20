@@ -2894,9 +2894,6 @@ size_t FILEIO_Write (const void * buffer, size_t size, size_t count, FILEIO_OBJE
     }
     
     filePtr->absoluteOffset += dataWritten;
-    
-    
-    
 
     return dataWritten;
 }

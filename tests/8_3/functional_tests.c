@@ -191,7 +191,6 @@ bool SeekAndWriteAtEnd(void){
     return true;
 }
 
-
 bool SeekAndWritePastEnd(void){ 
     const char name[] = "SeekAndWritePastEnd";
     FILEIO_OBJECT myFile;
@@ -303,6 +302,10 @@ TEST_FUNCTION tests[]={
     &DirectoryRemoveAfterFileDeleted,
     &DirectoryRemoveWhileNotEmpty,
     &DirectoryRemoveAfterFolderDeletedButFileRemains,
+    &SeekAndWriteNotPassingEnd,
+    &SeekAndWriteAtEnd,
+    &SeekAndWritePastEnd,
+    &SeekAndWritePastEnd_2,
     &CreateMultipleDirectoriesAtOnce
 };
 
