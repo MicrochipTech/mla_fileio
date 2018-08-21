@@ -225,6 +225,33 @@ bool SeekAndWritePastEnd_2(void){
     return true;
 }
 
+bool SeekAndWritePastEnd_3(void){ 
+    const char name[] = "SeekAndWritePastEnd_3";
+    FILEIO_OBJECT myFile;
+    
+    if(FILEIO_Open(&myFile, "TEST.TXT", FILEIO_OPEN_WRITE | FILEIO_OPEN_READ | FILEIO_OPEN_CREATE | FILEIO_OPEN_TRUNCATE) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Write("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1, 26, &myFile) != 26) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Seek(&myFile, 28, FILEIO_SEEK_SET) != FILEIO_RESULT_FAILURE) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_ErrorGet('A') != FILEIO_ERROR_INVALID_ARGUMENT){printf("TEST FAILED: %s\r\n", name); return false;}
+    FILEIO_ErrorClear('A');
+
+    return true;
+}
+
+bool ErrorClear(void){ 
+    const char name[] = "SeekAndWritePastEnd_3";
+    FILEIO_OBJECT myFile;
+    
+    if(FILEIO_Open(&myFile, "TEST.TXT", FILEIO_OPEN_WRITE | FILEIO_OPEN_READ | FILEIO_OPEN_CREATE | FILEIO_OPEN_TRUNCATE) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Write("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1, 26, &myFile) != 26) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_Seek(&myFile, 28, FILEIO_SEEK_SET) != FILEIO_RESULT_FAILURE) {printf("TEST FAILED: %s\r\n", name); return false;}
+    if(FILEIO_ErrorGet('A') != FILEIO_ERROR_INVALID_ARGUMENT){printf("TEST FAILED: %s\r\n", name); return false;}
+    FILEIO_ErrorClear('A');
+    if(FILEIO_ErrorGet('A') != FILEIO_ERROR_NONE){printf("TEST FAILED: %s\r\n", name); return false;}
+    
+    return true;
+}
+
 bool CreateMultipleDirectoriesAtOnce(void){ 
     const char name[] = "CreateMultipleDirectoriesAtOnce";
     
@@ -306,22 +333,30 @@ TEST_FUNCTION tests[]={
     &SeekAndWriteAtEnd,
     &SeekAndWritePastEnd,
     &SeekAndWritePastEnd_2,
+    &SeekAndWritePastEnd_3,
+    &ErrorClear,
     &CreateMultipleDirectoriesAtOnce
 };
 
-void RunFunctionalTests(void){
+const uint32_t test_count = (sizeof(tests)/sizeof(TEST_FUNCTION));
+
+static int RunTests(struct EMULATED_DRIVE *drive){
     int test_index;
     uint32_t passed;
-    const uint32_t test_count = (sizeof(tests)/sizeof(TEST_FUNCTION));
-    struct EMULATED_DRIVE *drive = &DRV096; 
            
     passed = 0;
-    for(test_index=0; test_index < (sizeof(tests)/sizeof(TEST_FUNCTION)); test_index++){
+    for(test_index=0; test_index < test_count; test_index++){
         if(TestSetup(drive) == true){
             passed += tests[test_index]();
             TestTearDown();
         }
     }
+
+    return passed;    
+}
+
+void RunFunctionalTests(void){
+    int passed = RunTests(&DRV096);
     
     printf( "Functional tests: run: %i, passed: %i, failed: %i\r\n", test_count, passed, test_count-passed);
 }
