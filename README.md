@@ -17,6 +17,7 @@ For PIC32 file system support, please visit http://www.microchip.com/harmony.
 * inc - the public interface files (.h)
 * doc - the compiled documentation how to use this library.
 * drivers - physical layer driver examples for the fileio library.
+* tests - test program to verify library functionality
 
 ## Testing
 The tests folder has a NetBeans project that will run unit tests on emulated drives.
