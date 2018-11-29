@@ -609,13 +609,13 @@ uint8_t FILEIO_InternalFlash_SectorWrite(void* config, uint32_t sector_addr, uin
                         //Write the data
                         #if defined(__XC8)
                             TABLAT = *p++;
-                            #asm
-                                tblwtpostinc
-                            #endasm
-                            sectorCounter++;
-                        #elif defined(__18CXX)
-                            TABLAT = *p++;
-                            _asm tblwtpostinc _endasm
+                            #if defined(__CLANG__)
+                                asm("tblwtpostinc");
+                            #else
+                                #asm 
+                                    tblwtpostinc 
+                                #endasm
+                            #endif
                             sectorCounter++;
                         #endif
 
@@ -629,22 +629,18 @@ uint8_t FILEIO_InternalFlash_SectorWrite(void* config, uint32_t sector_addr, uin
                     //Now commit/write the block of data from the programming latches into the flash memory
                     #if defined(__XC8)
                         // Start the write process: for PIC18, first need to reposition tblptr back into memory block that we want to write to.
-                        #asm 
-                            tblrdpostdec 
-                        #endasm
+                        #if defined(__CLANG__)
+                        asm("tblrdpostdec");
+                        #else
+                            #asm 
+                                tblrdpostdec 
+                            #endasm
+                        #endif
 
                         // Write flash memory, enable write control.
                         EECON1 = 0x84;
                         UnlockAndActivate(NVM_UNLOCK_KEY);
                         TBLPTR++;                    
-                    #elif defined(__18CXX)
-                        // Start the write process: for PIC18, first need to reposition tblptr back into memory block that we want to write to.
-                         _asm tblrdpostdec _endasm
-
-                        // Write flash memory, enable write control.
-                        EECON1 = 0x84;
-                        UnlockAndActivate(NVM_UNLOCK_KEY);
-                        TBLPTR++;
                     #endif
                 }//while(i-- > 0)
             }//if(foundDifference == true)

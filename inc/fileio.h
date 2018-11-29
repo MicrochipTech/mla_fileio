@@ -29,7 +29,7 @@ please contact mla_licensing@microchip.com
 #include "fileio_config.h"
 #include "system.h"
 
-#include <fileio_media.h>
+#include "fileio_media.h"
 
 
 /*******************************************************************/
@@ -404,9 +404,9 @@ typedef union
 {
     struct
     {
-        uint16_t day : 5;           // Day (1-31)
-        uint16_t month : 4;         // Month (1-12)
-        uint16_t year : 7;          // Year (number of years since 1980)
+        unsigned day : 5;           // Day (1-31)
+        unsigned month : 4;         // Month (1-12)
+        unsigned year : 7;          // Year (number of years since 1980)
     } bitfield;
     uint16_t value;
 } FILEIO_DATE;
@@ -416,9 +416,9 @@ typedef union
 {
     struct
     {
-        uint16_t secondsDiv2 : 5;   // (Seconds / 2) ( 1-30)
-        uint16_t minutes : 6;       // Minutes ( 1-60)
-        uint16_t hours : 5;         // Hours (1-24)
+        unsigned secondsDiv2 : 5;   // (Seconds / 2) ( 1-30)
+        unsigned minutes : 6;       // Minutes ( 1-60)
+        unsigned hours : 5;         // Hours (1-24)
     } bitfield;
     uint16_t value;
 } FILEIO_TIME;

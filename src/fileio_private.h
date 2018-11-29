@@ -24,7 +24,7 @@ please contact mla_licensing@microchip.com
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <fileio.h>
+#include "fileio.h"
 
 #if defined __XC8__
 #define PACKED
@@ -113,10 +113,12 @@ typedef struct
     uint8_t     mount;                      // Device mount flag (true if disk was mounted successfully, false otherwise)
     uint8_t     error;                      // Last error that occurred for this drive
     char        driveId;
+    uint32_t    currentCluster;             // Current cluster on the drive for file creation purposes.
 } PACKED FILEIO_DRIVE;
 
 typedef struct
 {
+    uint16_t currentEntry;
     uint32_t cluster;
     FILEIO_DRIVE * drive;
 } FILEIO_DIRECTORY;
@@ -321,10 +323,10 @@ uint32_t FILEIO_FATRead (FILEIO_DRIVE * disk, uint32_t currentCluster);
 FILEIO_DIRECTORY_ENTRY * FILEIO_DirectoryEntryCache (FILEIO_DIRECTORY * directory, FILEIO_ERROR_TYPE * error, uint32_t * currentCluster, uint16_t * currentClusterOffset, uint16_t entryOffset);
 bool FILEIO_FlushBuffer (FILEIO_DRIVE * disk, FILEIO_BUFFER_ID bufferId);
 FILEIO_ERROR_TYPE FILEIO_EraseClusterChain (uint32_t cluster, FILEIO_DRIVE * disk);
-FILEIO_ERROR_TYPE FILEIO_DirectoryEntryCreate (FILEIO_OBJECT * filePtr, uint16_t * entryHandle, uint8_t attributes, bool allocateDataCluster);
+FILEIO_ERROR_TYPE FILEIO_DirectoryEntryCreate (FILEIO_OBJECT * filePtr, uint8_t attributes, bool allocateDataCluster);
 FILEIO_ERROR_TYPE FILEIO_ClusterAllocate (FILEIO_DRIVE * drive, uint32_t * cluster, bool eraseCluster);
 FILEIO_ERROR_TYPE FILEIO_EraseCluster (FILEIO_DRIVE * drive, uint32_t cluster);
-uint32_t FILEIO_FindEmptyCluster (FILEIO_DRIVE * drive, uint32_t baseCluster);
+uint32_t FILEIO_FindEmptyCluster (FILEIO_DRIVE * drive);
 uint32_t FILEIO_CreateFirstCluster (FILEIO_OBJECT * filePtr);
 FILEIO_ERROR_TYPE FILEIO_FindShortFileName (FILEIO_DIRECTORY * directory, FILEIO_OBJECT * filePtr, uint8_t * fileName, uint32_t * currentCluster, uint16_t * currentClusterOffset, uint16_t entryOffset, uint16_t attributes, FILEIO_SEARCH_TYPE mode);
 FILEIO_ERROR_TYPE FILEIO_EraseFile (FILEIO_OBJECT * filePtr, uint16_t * entryHandle, bool eraseData);

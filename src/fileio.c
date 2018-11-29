@@ -19,17 +19,15 @@ please contact mla_licensing@microchip.com
 *******************************************************************************/
 //DOM-IGNORE-END
 
-#include <fileio_config.h>
-#include <system.h>
-#include <fileio.h>
+#include "fileio_config.h"
+#include "system.h"
+#include "fileio.h"
 #include "fileio_private.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 
-uint32_t ReadRam32bit(uint8_t * pBuffer, uint16_t index);
-uint16_t ReadRam16bit (uint8_t * pBuffer, uint16_t index);
 
 /*****************************************************************************/
 /*                         Global Variables                                  */
@@ -108,6 +106,7 @@ int FILEIO_Initialize (void)
     
     globalParameters.currentWorkingDirectory.drive = 0;
     globalParameters.currentWorkingDirectory.cluster = 0;
+    globalParameters.currentWorkingDirectory.currentEntry = 0;
 
     return true;
 }
@@ -168,6 +167,7 @@ FILEIO_ERROR_TYPE FILEIO_DriveMount (char driveId, const FILEIO_DRIVE_CONFIG * d
                 gDriveArray[i].driveId = driveId;
                 gDriveArray[i].driveConfig = driveConfig;
                 drive = &gDriveArray[i];
+                drive->currentCluster = 2;
                 break;
             }
         }
@@ -240,6 +240,7 @@ FILEIO_ERROR_TYPE FILEIO_DriveMount (char driveId, const FILEIO_DRIVE_CONFIG * d
         {
             globalParameters.currentWorkingDirectory.drive = drive;
             globalParameters.currentWorkingDirectory.cluster = drive->firstRootCluster;
+            globalParameters.currentWorkingDirectory.currentEntry = 0;
         }
     }
     else
@@ -377,10 +378,10 @@ FILEIO_ERROR_TYPE FILEIO_LoadBootSector (FILEIO_DRIVE * drive)
     FILEIO_BOOT_SECTOR * ptrBootSector;
     FILEIO_ERROR_TYPE error = FILEIO_ERROR_NONE;
     uint32_t rootDirectorySectors;
-    uint32_t totalSectors;
+    uint32_t totalSectors=0;
     uint32_t dataSectors;
     uint16_t bytesPerSector;
-    uint16_t reservedSectorCount;
+    uint16_t reservedSectorCount=0;
     bool triedSpecifiedBackupBootSec = false;
     bool triedBackupBootSecAtAddress6 = false;
 
@@ -452,7 +453,7 @@ FILEIO_ERROR_TYPE FILEIO_LoadBootSector (FILEIO_DRIVE * drive)
                     #else // PIC24/30/33
 
                     // Read the count of reserved sectors
-                    reservedSectorCount = ReadRam16bit(drive->dataBuffer, BSI_RESRVSEC);
+                    memcpy(&reservedSectorCount, &drive->dataBuffer[BSI_RESRVSEC], 2);
                     // Load the count of sectors per cluster
                     drive->sectorsPerCluster = *(drive->dataBuffer + BSI_SPC);
                     // Load the sector number of the first FAT sector
@@ -460,25 +461,25 @@ FILEIO_ERROR_TYPE FILEIO_LoadBootSector (FILEIO_DRIVE * drive)
                     // Load the count of FAT tables
                     drive->fatCopyCount = *(drive->dataBuffer + BSI_FATCOUNT);
                     // Load the size of the FATs
-                    drive->fatSectorCount = ReadRam16bit (drive->dataBuffer, BSI_SPF);
+                    memcpy(&drive->fatSectorCount, &drive->dataBuffer[BSI_SPF], 2);
                     if(drive->fatSectorCount == 0)
                     {
-                        drive->fatSectorCount = ReadRam32bit (drive->dataBuffer, BSI_FATSZ32);
+                        memcpy(&drive->fatSectorCount, &drive->dataBuffer[BSI_FATSZ32], 4);
                     }
                     // Calculate the location of the root sector (for FAT12/16)
                     drive->firstRootSector = drive->firstFatSector + (uint32_t)(drive->fatCopyCount * (uint32_t)drive->fatSectorCount);
                     // Determine the max size of the root (will be 0 for FAT32)
-                    drive->rootDirectoryEntryCount = ReadRam16bit (drive->dataBuffer, BSI_ROOTDIRENTS);
+                    memcpy(&drive->rootDirectoryEntryCount, &drive->dataBuffer[BSI_ROOTDIRENTS], 2);
 
                     // Determine the total number of sectors in the partition
-                    totalSectors = ReadRam16bit (drive->dataBuffer, BSI_TOTSEC16);
+                    memcpy(&totalSectors, &drive->dataBuffer[BSI_TOTSEC16], 2);
                     if(totalSectors == 0 )
                     {
-                        totalSectors = ReadRam32bit (drive->dataBuffer, BSI_TOTSEC32);
+                        memcpy(&totalSectors, &drive->dataBuffer[BSI_TOTSEC32],4);
                     }
 
                     // Calculate the number of uint8_ts in each sector
-                    bytesPerSector = ReadRam16bit (drive->dataBuffer, BSI_BPS);
+                    memcpy(&bytesPerSector, &drive->dataBuffer[BSI_BPS], 2);
                     if((bytesPerSector == 0) || ((bytesPerSector & 1) == 1))
                     {
                         error = FILEIO_ERROR_UNSUPPORTED_SECTOR_SIZE;
@@ -516,7 +517,7 @@ FILEIO_ERROR_TYPE FILEIO_LoadBootSector (FILEIO_DRIVE * drive)
                         #ifdef __XC8__
                             drive->firstRootCluster = ptrBootSector->biosParameterBlock.fat32.firstClusterRootDirectory;
                         #else
-                            drive->firstRootCluster = ReadRam32bit (drive->dataBuffer, BSI_ROOTCLUS);
+                            memcpy(&drive->firstRootCluster, &drive->dataBuffer[BSI_ROOTCLUS], 4 );
                         #endif
                         drive->firstDataSector = drive->firstRootSector + rootDirectorySectors;
                     }
@@ -645,6 +646,7 @@ int FILEIO_DriveUnmount (const char driveId)
     {
         globalParameters.currentWorkingDirectory.cluster = 0;
         globalParameters.currentWorkingDirectory.drive = NULL;
+        globalParameters.currentWorkingDirectory.currentEntry = 0;
     }
 
     return FILEIO_RESULT_SUCCESS;
@@ -884,10 +886,7 @@ int FILEIO_Open (FILEIO_OBJECT * filePtr, const char * fileName, uint16_t mode)
     {
         if ((mode & FILEIO_OPEN_CREATE) == FILEIO_OPEN_CREATE)
         {
-            // Try to create the file (or replace it, if the file was truncated
-            entryHandle = 0;
-
-            error = FILEIO_DirectoryEntryCreate (filePtr, &entryHandle, 0, true);
+            error = FILEIO_DirectoryEntryCreate (filePtr, 0, true);
 
             mode |= FILEIO_OPEN_APPEND;
         }
@@ -1211,7 +1210,6 @@ FILEIO_RESULT FILEIO_DirectoryMakeSingle (FILEIO_DIRECTORY * directory, const ch
     FILEIO_OBJECT * filePtr = &file;
     FILEIO_DIRECTORY_ENTRY * entry;
     FILEIO_TIMESTAMP timeStamp;
-    uint16_t entryOffset = 0;
     uint32_t dot, dotdot;
     uint32_t currentCluster;
     uint16_t currentClusterOffset = 0;
@@ -1243,7 +1241,7 @@ FILEIO_RESULT FILEIO_DirectoryMakeSingle (FILEIO_DIRECTORY * directory, const ch
         return FILEIO_RESULT_FAILURE;
     }
 
-    if (FILEIO_DirectoryEntryCreate (filePtr, &entryOffset, FILEIO_ATTRIBUTE_DIRECTORY, true) != FILEIO_ERROR_NONE)
+    if (FILEIO_DirectoryEntryCreate (filePtr, FILEIO_ATTRIBUTE_DIRECTORY, true) != FILEIO_ERROR_NONE)
     {
         return FILEIO_RESULT_FAILURE;
     }
@@ -1261,7 +1259,7 @@ FILEIO_RESULT FILEIO_DirectoryMakeSingle (FILEIO_DIRECTORY * directory, const ch
     directory->cluster = file.baseClusterDir;
     currentCluster = file.baseClusterDir;
 
-    entry = FILEIO_DirectoryEntryCache (directory, &error, &currentCluster, &currentClusterOffset, entryOffset);
+    entry = FILEIO_DirectoryEntryCache (directory, &error, &currentCluster, &currentClusterOffset, globalParameters.currentWorkingDirectory.currentEntry);
 
     if (entry == NULL)
     {
@@ -1278,9 +1276,8 @@ FILEIO_RESULT FILEIO_DirectoryMakeSingle (FILEIO_DIRECTORY * directory, const ch
     directory->cluster = file.firstCluster;
     currentCluster = file.firstCluster;
     currentClusterOffset = 0;
-    entryOffset = 0;
 
-    entry = FILEIO_DirectoryEntryCache (directory, &error, &currentCluster, &currentClusterOffset, entryOffset);
+    entry = FILEIO_DirectoryEntryCache (directory, &error, &currentCluster, &currentClusterOffset, 0);
 
     directory->cluster = file.baseClusterDir;
     
@@ -1372,6 +1369,11 @@ FILEIO_ERROR_TYPE FILEIO_FindShortFileName (FILEIO_DIRECTORY * directory, FILEIO
                 return error;
             }
 
+            if(entry->attributes == FILEIO_ATTRIBUTE_VOLUME && (attributes == FILEIO_ATTRIBUTE_VOLUME))
+            {
+                break;
+            }
+
             entryOffset++;
         } while (((entry->attributes == FILEIO_ATTRIBUTE_LONG_NAME) || (entry->attributes == FILEIO_ATTRIBUTE_VOLUME) || (((uint8_t)entry->name[0]) == FILEIO_DIRECTORY_ENTRY_DELETED)) && (entry->name[0] != FILEIO_DIRECTORY_ENTRY_EMPTY));
 
@@ -1424,14 +1426,12 @@ FILEIO_ERROR_TYPE FILEIO_FindShortFileName (FILEIO_DIRECTORY * directory, FILEIO
 }
 
 #if !defined (FILEIO_CONFIG_WRITE_DISABLE)
-FILEIO_ERROR_TYPE FILEIO_DirectoryEntryCreate (FILEIO_OBJECT * filePtr, uint16_t * entryHandle, uint8_t attributes, bool allocateDataCluster)
+FILEIO_ERROR_TYPE FILEIO_DirectoryEntryCreate (FILEIO_OBJECT * filePtr, uint8_t attributes, bool allocateDataCluster)
 {
     FILEIO_ERROR_TYPE error = FILEIO_ERROR_NONE;
     uint32_t cluster;
 
-    *entryHandle = 0;
-
-    if (FILEIO_DirectoryEntryFindEmpty(filePtr, entryHandle) == FILEIO_ERROR_NONE)
+    if (FILEIO_DirectoryEntryFindEmpty(filePtr, &globalParameters.currentWorkingDirectory.currentEntry) == FILEIO_ERROR_NONE)
     {
         // Allocate a data cluster to the file object, if necessary
         if (allocateDataCluster)
@@ -1446,7 +1446,7 @@ FILEIO_ERROR_TYPE FILEIO_DirectoryEntryCreate (FILEIO_OBJECT * filePtr, uint16_t
 
         if (error == FILEIO_ERROR_NONE)
         {
-            error = FILEIO_DirectoryEntryPopulate(filePtr, entryHandle, attributes, cluster);
+            error = FILEIO_DirectoryEntryPopulate(filePtr, &globalParameters.currentWorkingDirectory.currentEntry, attributes, cluster);
         }
     }
     else
@@ -1466,7 +1466,7 @@ uint32_t FILEIO_CreateFirstCluster (FILEIO_OBJECT * filePtr)
     FILEIO_DRIVE * drive = filePtr->disk;
     uint32_t cluster;
 
-    cluster = FILEIO_FindEmptyCluster (filePtr->disk, 2);
+    cluster = FILEIO_FindEmptyCluster (filePtr->disk);
 
     if (cluster == 0)
     {
@@ -1667,7 +1667,7 @@ FILEIO_ERROR_TYPE FILEIO_ClusterAllocate (FILEIO_DRIVE * drive, uint32_t * clust
 {
     uint32_t newCluster;
 
-    newCluster = FILEIO_FindEmptyCluster (drive, *cluster);
+    newCluster = FILEIO_FindEmptyCluster (drive);
     if (newCluster == 0)
     {
         return FILEIO_ERROR_DRIVE_FULL;
@@ -1702,10 +1702,11 @@ FILEIO_ERROR_TYPE FILEIO_ClusterAllocate (FILEIO_DRIVE * drive, uint32_t * clust
 #endif
 
 #if !defined (FILEIO_CONFIG_WRITE_DISABLE)
-uint32_t FILEIO_FindEmptyCluster (FILEIO_DRIVE * drive, uint32_t baseCluster)
+uint32_t FILEIO_FindEmptyCluster (FILEIO_DRIVE * drive)
 {
     uint32_t cluster = 0x0;
     uint32_t currentCluster, endClusterLimit, clusterFailValue;
+    uint32_t baseCluster = drive->currentCluster;
 
     /* Settings based on FAT type */
     switch (drive->type)
@@ -1760,7 +1761,9 @@ uint32_t FILEIO_FindEmptyCluster (FILEIO_DRIVE * drive, uint32_t baseCluster)
             break;
         }
     }  // scanning for an empty cluster
-
+    
+    drive->currentCluster = currentCluster;
+    
     return(currentCluster);
 }
 #endif
@@ -2024,7 +2027,7 @@ uint32_t FILEIO_ClusterToSector(FILEIO_DRIVE * disk, uint32_t cluster)
 uint32_t FILEIO_FATRead (FILEIO_DRIVE * disk, uint32_t currentCluster)
 {
     uint8_t q;
-    uint32_t p, l;  // "l" is the sector Address
+    uint32_t p, sector_address;
     uint32_t c = 0, d, ClusterFailValue,LastClusterLimit;   // ClusterEntries
 
     /* Settings based on FAT type */
@@ -2052,21 +2055,21 @@ uint32_t FILEIO_FATRead (FILEIO_DRIVE * disk, uint32_t currentCluster)
             break;
     }
 
-    l = disk->firstFatSector + (p / disk->sectorSize);     //
+    sector_address = disk->firstFatSector + (p >> ((disk->sectorSize >> 9) + 8));     //p/(disk->sectorSize) = p>>((disk->sectorSize >> 9)+8)
     p &= disk->sectorSize - 1;                 // Restrict 'p' within the FATbuffer size
 
     // Check if the appropriate FAT sector is already loaded
-    if (disk->bufferStatusPtr->fatBufferCachedSector == l)
+    if (disk->bufferStatusPtr->fatBufferCachedSector == sector_address)
     {
         if (disk->type == FILEIO_FILE_SYSTEM_TYPE_FAT32)
         {
-            c = ReadRam32bit (disk->fatBuffer, p);
+            memcpy(&c, &disk->fatBuffer[p], 4);
         }
         else
         {
             if(disk->type == FILEIO_FILE_SYSTEM_TYPE_FAT16)
             {
-                c = ReadRam16bit (disk->fatBuffer, p);
+                memcpy(&c, &disk->fatBuffer[p], 2 );
             }
             else if(disk->type == FILEIO_FILE_SYSTEM_TYPE_FAT12)
             {
@@ -2075,7 +2078,7 @@ uint32_t FILEIO_FATRead (FILEIO_DRIVE * disk, uint32_t currentCluster)
                 {
                     c >>= 4;
                 }
-                // Check if the MSB is across the sector boundry
+                // Check if the MSB is across the sector boundary
                 p = (p +1) & (disk->sectorSize-1);
                 if (p == 0)
                 {
@@ -2087,14 +2090,14 @@ uint32_t FILEIO_FATRead (FILEIO_DRIVE * disk, uint32_t currentCluster)
                         return ClusterFailValue;
                     }
 #endif
-                    if (!(*disk->driveConfig->funcSectorRead) (disk->mediaParameters, l+1, disk->fatBuffer))
+                    if (!(*disk->driveConfig->funcSectorRead) (disk->mediaParameters, sector_address+1, disk->fatBuffer))
                     {
                         disk->bufferStatusPtr->fatBufferCachedSector = 0xFFFFFFFF;
                         return ClusterFailValue;
                     }
                     else
                     {
-                        disk->bufferStatusPtr->fatBufferCachedSector = l + 1;
+                        disk->bufferStatusPtr->fatBufferCachedSector = sector_address + 1;
                     }
                 }
                 d = *(disk->fatBuffer + p);
@@ -2119,24 +2122,24 @@ uint32_t FILEIO_FATRead (FILEIO_DRIVE * disk, uint32_t currentCluster)
             return ClusterFailValue;
         }
 #endif
-        if (!(*disk->driveConfig->funcSectorRead) (disk->mediaParameters, l, disk->fatBuffer))
+        if (!(*disk->driveConfig->funcSectorRead) (disk->mediaParameters, sector_address, disk->fatBuffer))
         {
             disk->bufferStatusPtr->fatBufferCachedSector = 0xFFFFFFFF;  // Note: It is Sector not Cluster.
             return ClusterFailValue;
         }
         else
         {
-            disk->bufferStatusPtr->fatBufferCachedSector = l;
+            disk->bufferStatusPtr->fatBufferCachedSector = sector_address;
 
             if (disk->type == FILEIO_FILE_SYSTEM_TYPE_FAT32)
             {
-                c = ReadRam32bit (disk->fatBuffer, p);
+                memcpy(&c, &disk->fatBuffer[p], 4);
             }
             else
             {
                 if(disk->type == FILEIO_FILE_SYSTEM_TYPE_FAT16)
                 {
-                    c = ReadRam16bit (disk->fatBuffer, p);
+                    memcpy(&c, &disk->fatBuffer[p], 2);
                 }
                 else if (disk->type == FILEIO_FILE_SYSTEM_TYPE_FAT12)
                 {
@@ -2414,8 +2417,6 @@ uint32_t FILEIO_FATWrite (FILEIO_DRIVE *disk, uint32_t currentCluster, uint32_t 
         }
         else if (disk->type == FILEIO_FILE_SYSTEM_TYPE_FAT12)
         {
-            statusPtr->flags.fatBufferNeedsWrite = true;
-            
             // Get the current uint8_t from the FAT
             c = *(disk->fatBuffer + p);
             if (q)
@@ -2861,18 +2862,19 @@ size_t FILEIO_Write (const void * buffer, size_t size, size_t count, FILEIO_OBJE
                 return FILEIO_ERROR_WRITE;
             }
 
-            if ((*disk->driveConfig->funcSectorRead) (disk->mediaParameters, currentSector, disk->dataBuffer) != true)
+            if(filePtr->size != filePtr->absoluteOffset)
             {
-                disk->error = FILEIO_ERROR_BAD_SECTOR_READ;
-                return dataWritten;
+                if ((*disk->driveConfig->funcSectorRead) (disk->mediaParameters, currentSector, disk->dataBuffer) != true)
+                {
+                    disk->error = FILEIO_ERROR_BAD_SECTOR_READ;
+                    return dataWritten;
+                }
             }
-            else
-            {
-                disk->bufferStatusPtr->dataBufferCachedSector = currentSector;
+            
+            disk->bufferStatusPtr->dataBufferCachedSector = currentSector;
 #if defined (FILEIO_CONFIG_MULTIPLE_BUFFER_MODE_DISABLE)
-                disk->bufferStatusPtr->driveOwner = disk;
+            disk->bufferStatusPtr->driveOwner = disk;
 #endif
-            }
         }
 
         writeCount = ((disk->sectorSize - filePtr->currentOffset) > length) ? length : (disk->sectorSize - filePtr->currentOffset);
@@ -3012,6 +3014,8 @@ int FILEIO_Remove (const char * pathName)
     uint16_t currentClusterOffset = 0;
     char * fileName;
 
+    error = FILEIO_RESULT_SUCCESS;
+    
     fileName = (char *)FILEIO_CacheDirectory (&directory, pathName, false);
 
     if (fileName == NULL)
@@ -3058,7 +3062,7 @@ int FILEIO_Remove (const char * pathName)
         }
     }
 
-    // Check to ensure no errors occured
+    // Check to ensure no errors occurred
     if (error != FILEIO_ERROR_NONE)
     {
         directory.drive->error = error;
@@ -3251,6 +3255,7 @@ int FILEIO_DirectoryChange (const char * path)
     // Directory was changed successfully
     globalParameters.currentWorkingDirectory.drive = directory.drive;
     globalParameters.currentWorkingDirectory.cluster = directory.cluster;
+    globalParameters.currentWorkingDirectory.currentEntry = 0;
 
     return FILEIO_RESULT_SUCCESS;
 }
@@ -3355,7 +3360,7 @@ int FILEIO_DirectoryRemove (const char * path)
         {
             return FILEIO_RESULT_FAILURE;
         }
-    } while ((entry->name[0] != FILEIO_DIRECTORY_ENTRY_EMPTY) );
+    } while (entry->name[0] != FILEIO_DIRECTORY_ENTRY_EMPTY);
 
     return FILEIO_DirectoryRemoveSingle (&directory, finalPath);
 }
@@ -3371,6 +3376,8 @@ int FILEIO_DirectoryRemoveSingle (FILEIO_DIRECTORY * directory, char * path)
     uint8_t fileNameType;
     uint32_t currentCluster = directory->cluster;
     uint16_t currentClusterOffset = 0;
+    
+    error = FILEIO_RESULT_SUCCESS;
 
     fileNameType = FILEIO_FileNameTypeGet(path, false);
 
@@ -3638,6 +3645,8 @@ int FILEIO_Find (const char * fileName, unsigned int attr, FILEIO_SEARCH_RECORD 
     FILEIO_OBJECT file;
     char * fileWithoutDirectory;
 
+    error = FILEIO_RESULT_SUCCESS;
+    
     if (newSearch)
     {
         fileWithoutDirectory = (char *)FILEIO_CacheDirectory (&directory, fileName, false);
@@ -3844,6 +3853,7 @@ int FILEIO_Format (FILEIO_DRIVE_CONFIG * config, void * mediaParameters, FILEIO_
     FILEIO_BUFFER_STATUS * bufferStatusPtr;
     FILEIO_DRIVE * tempDriveOwner;
 
+    d.mediaParameters = mediaParameters;
 #if defined (FILEIO_CONFIG_MULTIPLE_BUFFER_MODE_DISABLE)
     bufferStatusPtr = &bufferStatus;
     d.dataBuffer = gDataBuffer;
@@ -4686,30 +4696,3 @@ int FILEIO_GetSingleBuffer (FILEIO_DRIVE * drive)
     return FILEIO_RESULT_SUCCESS;
 }
 #endif
-
-uint16_t ReadRam16bit (uint8_t * pBuffer, uint16_t index)
-{
-    uint16_t res;
-
-    pBuffer += index + 1;
-    res = *pBuffer--;
-    res <<= 8;
-    res |= *pBuffer;
-    return res;
-}
-
-uint32_t ReadRam32bit(uint8_t * pBuffer, uint16_t index)
-{
-    uint32_t res;
-
-    pBuffer += index + 3;
-    res = *pBuffer--;
-    res <<= 8;
-    res |= *pBuffer--;
-    res <<= 8;
-    res |= *pBuffer--;
-    res <<= 8;
-    res |= *pBuffer;
-
-    return res;
-}
