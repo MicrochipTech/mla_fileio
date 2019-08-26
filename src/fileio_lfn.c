@@ -19,8 +19,7 @@ please contact mla_licensing@microchip.com
 *******************************************************************************/
 //DOM-IGNORE-END
 
-#include "system_config.h"
-#include "system.h"
+#include "fileio_config.h"
 #include "fileio_lfn.h"
 #include "../src/fileio_private_lfn.h"
 #include <string.h>
@@ -184,7 +183,7 @@ FILEIO_ERROR_TYPE FILEIO_DriveMount (uint16_t driveId, const FILEIO_DRIVE_CONFIG
 #if defined (FILEIO_CONFIG_MULTIPLE_BUFFER_MODE_DISABLE)
     if (drive->bufferStatusPtr->driveOwner == drive)
     {
-        drive->bufferStatusPtr->driveOwnerdriveOwner = NULL;
+        drive->bufferStatusPtr->driveOwner = NULL;
     }
 #else
     bufferStatus[i].flags.dataBufferNeedsWrite = false;
@@ -277,19 +276,11 @@ FILEIO_ERROR_TYPE FILEIO_LoadMBR (FILEIO_DRIVE * drive)
          // Technically, the OEM name is not for indication
          // The alternative is to read the CIS from attribute
          // memory.  See the PCMCIA metaformat for more details
-/*    #if defined (__XC16__) || defined (__XC32__)
-            if ((*(drive->dataBuffer + BSI_FSTYPE) == 'F') && \
-                (*(drive->dataBuffer + BSI_FSTYPE + 1) == 'A') && \
-                (*(drive->dataBuffer + BSI_FSTYPE + 2) == 'T') && \
-                (*(drive->dataBuffer + BSI_FSTYPE + 3) == '1') && \
-                (*(drive->dataBuffer + BSI_BOOTSIG) == 0x29))
-#else*/
             if ((ptrBootSector->biosParameterBlock.fat16.fileSystemType[0] == 'F') && \
                 (ptrBootSector->biosParameterBlock.fat16.fileSystemType[1] == 'A') && \
                 (ptrBootSector->biosParameterBlock.fat16.fileSystemType[2] == 'T') && \
                 (ptrBootSector->biosParameterBlock.fat16.fileSystemType[3] == '1') && \
                 (ptrBootSector->biosParameterBlock.fat16.bootSignature == 0x29))
-//    #endif
              {
                 drive->firstPartitionSector = 0;
                 drive->type = FILEIO_FILE_SYSTEM_TYPE_FAT16;
@@ -297,7 +288,7 @@ FILEIO_ERROR_TYPE FILEIO_LoadMBR (FILEIO_DRIVE * drive)
              }
              else
              {
-#if defined (__XC16__) || defined (__XC32__)
+#if !defined (__XC8__)
                 if ((*(drive->dataBuffer + BSI_FAT32_FSTYPE ) == 'F') && \
                     (*(drive->dataBuffer + BSI_FAT32_FSTYPE + 1 ) == 'A') && \
                     (*(drive->dataBuffer + BSI_FAT32_FSTYPE + 2 ) == 'T') && \
@@ -387,10 +378,10 @@ FILEIO_ERROR_TYPE FILEIO_LoadBootSector (FILEIO_DRIVE * drive)
     FILEIO_BOOT_SECTOR * ptrBootSector;
     FILEIO_ERROR_TYPE error = FILEIO_ERROR_NONE;
     uint32_t rootDirectorySectors;
-    uint32_t totalSectors;
+    uint32_t totalSectors=0;
     uint32_t dataSectors;
     uint16_t bytesPerSector;
-    uint16_t reservedSectorCount;
+    uint16_t reservedSectorCount=0;
     bool triedSpecifiedBackupBootSec = false;
     bool triedBackupBootSecAtAddress6 = false;
 
@@ -1074,7 +1065,7 @@ uint16_t * FILEIO_CacheDirectory (FILEIO_DIRECTORY * dir, uint16_t * path, bool 
 #endif
 
     // Find the next forward slash (indicates part of the path is a directory)
-    while ((i = FILEIO_FindNextDelimiter(path)) != -1)
+    while ((i = FILEIO_FindNextDelimiter(path)) != ((uint16_t)-1))
     {
         // If someone terminated a directory path with a delimiter, break out of the loop
         if (*(path + i) == FILEIO_CONFIG_DELIMITER)
@@ -1139,7 +1130,7 @@ uint16_t FILEIO_FindNextDelimiter(const uint16_t * path)
 
     if (c == 0)
     {
-        return -1;
+        return ((uint16_t)-1);
     }
     else
     {
@@ -1162,7 +1153,7 @@ FILEIO_RESULT FILEIO_DirectoryChangeSingle (FILEIO_DIRECTORY * directory, uint16
 
     if (fileNameType == FILEIO_NAME_INVALID)
     {
-		directory->drive->error = FILEIO_ERROR_INVALID_FILENAME;
+        directory->drive->error = FILEIO_ERROR_INVALID_FILENAME;
         return FILEIO_RESULT_FAILURE;
     }
     else if (fileNameType == FILEIO_NAME_SHORT)
@@ -1393,6 +1384,11 @@ FILEIO_ERROR_TYPE FILEIO_FindShortFileName (FILEIO_DIRECTORY * directory, FILEIO
             {
                 directory->drive->error = FILEIO_ERROR_BAD_CACHE_READ;
                 return error;
+            }
+
+            if(entry->attributes == FILEIO_ATTRIBUTE_VOLUME && (attributes == FILEIO_ATTRIBUTE_VOLUME))
+            {
+                break;
             }
 
             entryOffset++;
@@ -3066,7 +3062,7 @@ int FILEIO_Seek(FILEIO_OBJECT * filePtr, int32_t offset, int whence)
         // figure out how many sectors
         numsector = offset2 / disk->sectorSize;
 
-        // figure out how many uint8_ts off of the offset
+        // figure out how many bytes off of the offset
         offset2 = offset2 - (numsector * disk->sectorSize);
         filePtr->currentOffset = offset2;
 
@@ -3545,6 +3541,7 @@ int FILEIO_Rename (const uint16_t * oldPathname, const uint16_t * newFilename)
         return FILEIO_RESULT_FAILURE;
     }
 
+    // The file was found.  Replace the name.
     entryHandle = filePtr->entry;
 
     // The file was found.  Replace the name.
@@ -3777,7 +3774,7 @@ int FILEIO_DirectoryRemove (const uint16_t * path)
     currentCluster = deletedDirectory.cluster;
     do
     {
-        entry = FILEIO_DirectoryEntryCache (&deletedDirectory, &error, &currentCluster, &currentClusterOffset, entryOffset);
+        entry = FILEIO_DirectoryEntryCache (&deletedDirectory, &error, &currentCluster, &currentClusterOffset, entryOffset++);
         if (entry == NULL)
         {
             return FILEIO_RESULT_FAILURE;
@@ -3803,6 +3800,8 @@ int FILEIO_DirectoryRemoveSingle (FILEIO_DIRECTORY * directory, uint16_t * path)
     uint8_t fileNameType;
     uint32_t currentCluster = directory->cluster;
     uint16_t currentClusterOffset = 0;
+    
+    error = FILEIO_RESULT_SUCCESS;
 
     fileNameType = FILEIO_FileNameTypeGet(path, false);
 
@@ -4120,6 +4119,8 @@ int FILEIO_Find (const uint16_t * fileName, unsigned int attr, FILEIO_SEARCH_REC
     FILEIO_OBJECT file;
     uint16_t * fileWithoutDirectory;
 
+    error = FILEIO_RESULT_SUCCESS;
+    
     if (newSearch)
     {
         fileWithoutDirectory = FILEIO_CacheDirectory (&directory, (uint16_t *)fileName, false);
@@ -4157,7 +4158,7 @@ int FILEIO_Find (const uint16_t * fileName, unsigned int attr, FILEIO_SEARCH_REC
 
     if ((fileNameType == FILEIO_NAME_INVALID) || (fileNameType == FILEIO_NAME_DOT))
     {
-        directory.drive->error = FILEIO_ERROR_INVALID_FILENAME;
+		directory.drive->error = FILEIO_ERROR_INVALID_FILENAME;
         return FILEIO_RESULT_FAILURE;
     }
     else if (fileNameType == FILEIO_NAME_SHORT)
@@ -4486,7 +4487,7 @@ int FILEIO_Format (FILEIO_DRIVE_CONFIG * config, void * mediaParameters, FILEIO_
         // Technically, the OEM name is not for indication
         // The alternative is to read the CIS from attribute
         // memory.  See the PCMCIA metaformat for more details
-#if defined (__XC16__) || defined (__XC32__)
+#if !defined (__XC8__)
         if ((*(disk->dataBuffer + BSI_FSTYPE ) == 'F') && \
             (*(disk->dataBuffer + BSI_FSTYPE + 1 ) == 'A') && \
             (*(disk->dataBuffer + BSI_FSTYPE + 2 ) == 'T') && \

@@ -26,8 +26,6 @@ please contact mla_licensing@microchip.com
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
-#include "system_config.h"
-#include "system.h"
 
 #include <fileio_media.h>
 
