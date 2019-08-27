@@ -26,6 +26,7 @@ please contact mla_licensing@microchip.com
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 
 /*****************************************************************************/
@@ -5328,6 +5329,19 @@ FILEIO_ERROR_TYPE FILEIO_FindLongFileName (FILEIO_DIRECTORY * directory, FILEIO_
     }
 }
 
+static bool IsValidShortNameCharacter(char c)
+{
+    switch(c)
+    {
+        case ' ':
+            return false;
+        default:
+            break;
+    }
+    
+    return true;
+}
+
 FILEIO_LFN_ERROR FILEIO_LongFileNameCache (FILEIO_DIRECTORY * directory, uint16_t shortEntryOffset, uint32_t currentCluster, uint8_t checksum)
 {
     uint16_t i = 0;
@@ -5342,6 +5356,59 @@ FILEIO_LFN_ERROR FILEIO_LongFileNameCache (FILEIO_DIRECTORY * directory, uint16_
         return FILEIO_LFN_NONE;
     }
 
+#ifndef FILEIO_CONFIG_DISABLE_WINDOWS_LFN_SHORTCUT_SUPPORT
+    {
+        FILEIO_DIRECTORY_ENTRY * sfnEntry = FILEIO_DirectoryEntryCache (directory, &error, &currentCluster, &currentClusterOffset, shortEntryOffset);
+
+        if( (sfnEntry->reserved0 & 0x18) != 0)
+        {
+            uint8_t sfnCharacterIndex;
+            uint8_t lfnCharacterIndex;
+
+            //Windows specific extension 
+            //  bit 3 = lower case base name ( 0x20 offset from upper case ASCII character )
+            //  bit 4 = lower case extension ( 0x20 offset from upper case ASCII character )
+            char basenameOffset  = ((sfnEntry->reserved0 & 0x08) != 0) ? 0x20 : 0;
+            char extensionOffset = ((sfnEntry->reserved0 & 0x10) != 0) ? 0x20 : 0;
+
+            lfnCharacterIndex = 0;
+            for(sfnCharacterIndex = 0; sfnCharacterIndex < 8; sfnCharacterIndex++)
+            {
+                char character = sfnEntry->name[sfnCharacterIndex];
+                if(IsValidShortNameCharacter(character))
+                {
+                    lfnBuffer[lfnCharacterIndex] = (uint16_t)character;
+                    if(isalpha(character))
+                    {
+                       lfnBuffer[lfnCharacterIndex] += basenameOffset;
+                    }
+                    lfnCharacterIndex++;
+                }              
+            }
+
+            lfnBuffer[lfnCharacterIndex++] = (uint16_t)'.';
+
+            for(sfnCharacterIndex = 8; sfnCharacterIndex < 11; sfnCharacterIndex++)
+            {
+                char character = sfnEntry->name[sfnCharacterIndex];
+                if(IsValidShortNameCharacter(character))
+                {   
+                    lfnBuffer[lfnCharacterIndex] = (uint16_t)character;
+                    if(isalpha(character))
+                    {
+                       lfnBuffer[lfnCharacterIndex] += extensionOffset;
+                    }
+                    lfnCharacterIndex++;
+                }
+            }
+
+            lfnBuffer[lfnCharacterIndex++] = 0; //null terminate
+
+            return FILEIO_LFN_SUCCESS;
+        }
+    }
+#endif
+        
     entryOffset = shortEntryOffset - 1;
 
     lfnEntry = (FILEIO_DIRECTORY_ENTRY_LFN *)FILEIO_DirectoryEntryCache (directory, &error, &currentCluster, &currentClusterOffset, entryOffset);

@@ -353,6 +353,132 @@ bool FindFilesInRoot(void){
     return true;
 }
 
+bool WindowsLFNBasenameUppercaseExtensionLowercase(void){  
+    const char name[] = "WindowsLFNBasenameUppercaseExtensionLowercase";
+    const uint16_t testFileName[] = {'T','E','S','T','1','.','t','x','t',0};
+    FILEIO_OBJECT myFile;
+    char data[10];
+    char expectedResults[] = "TEST1";
+    int dataRead;
+    const int dataCountExpected = 5;
+    
+    memset(data, 0, sizeof(data));
+    if(FILEIO_Open(&myFile, testFileName, FILEIO_OPEN_READ) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s -  Failed to find file.\r\n", name); return false;}
+
+    dataRead = FILEIO_Read(data, 1, sizeof(data), &myFile);
+   
+    if(dataRead != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
+    if(memcmp(data, expectedResults, strlen(expectedResults)-1) != 0){printf("TEST FAILED: %s - File data mismatch: expected(%s) actual(%s)\r\n", name, expectedResults, data); return false;} 
+    if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;} 
+
+    return true;
+}
+
+bool WindowsLFNBasenameLowercaseExtensionUppercase(void){  
+    const char name[] = "WindowsLFNBasenameLowercaseExtensionUppercase";
+    const uint16_t testFileName[] = {'t','e','s','t','2','.','T','X','T',0};
+    FILEIO_OBJECT myFile;
+    char data[10];
+    char expectedResults[] = "TEST2";
+    int dataRead;
+    const int dataCountExpected = 5;
+    
+    memset(data, 0, sizeof(data));
+    if(FILEIO_Open(&myFile, testFileName, FILEIO_OPEN_READ) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s -  Failed to find file.\r\n", name); return false;}
+
+    dataRead = FILEIO_Read(data, 1, sizeof(data), &myFile);
+   
+    if(dataRead != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
+    if(memcmp(data, expectedResults, strlen(expectedResults)-1) != 0){printf("TEST FAILED: %s - File data mismatch: expected(%s) actual(%s)\r\n", name, expectedResults, data); return false;} 
+    if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;} 
+
+    return true;
+}
+
+bool WindowsLFNBasenameLowercaseExtensionLowercase(void){  
+    const char name[] = "WindowsLFNBasenameLowercaseExtensionLowercase";
+    const uint16_t testFileName[] = {'t','e','s','t','3','.','t','x','t',0};
+    FILEIO_OBJECT myFile;
+    char data[10];
+    char expectedResults[] = "TEST3";
+    int dataRead;
+    const int dataCountExpected = 5;
+    
+    memset(data, 0, sizeof(data));
+    if(FILEIO_Open(&myFile, testFileName, FILEIO_OPEN_READ) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s -  Failed to find file.\r\n", name); return false;}
+
+    dataRead = FILEIO_Read(data, 1, sizeof(data), &myFile);
+   
+    if(dataRead != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
+    if(memcmp(data, expectedResults, strlen(expectedResults)-1) != 0){printf("TEST FAILED: %s - File data mismatch: expected(%s) actual(%s)\r\n", name, expectedResults, data); return false;} 
+    if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;} 
+
+    return true;
+}
+
+bool WindowsLFNBasenameUppercaseExtensionLowercaseShort(void){  
+    const char name[] = "WindowsLFNBasenameUppercaseExtensionLowercaseShort";
+    const uint16_t testFileName[] = {'T','E','S','T','4','.','t','x',0};
+    FILEIO_OBJECT myFile;
+    char data[10];
+    char expectedResults[] = "TEST4";
+    int dataRead;
+    const int dataCountExpected = 5;
+    
+    memset(data, 0, sizeof(data));
+    if(FILEIO_Open(&myFile, testFileName, FILEIO_OPEN_READ) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s -  Failed to find file.\r\n", name); return false;}
+
+    dataRead = FILEIO_Read(data, 1, sizeof(data), &myFile);
+   
+    if(dataRead != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
+    if(memcmp(data, expectedResults, strlen(expectedResults)-1) != 0){printf("TEST FAILED: %s - File data mismatch: expected(%s) actual(%s)\r\n", name, expectedResults, data); return false;} 
+    if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;} 
+
+    return true;
+}
+
+bool WindowsLFNBasenameLowercaseExtensionUppercaseShort(void){  
+    const char name[] = "WindowsLFNBasenameLowercaseExtensionUppercaseShort";
+    const uint16_t testFileName[] = {'t','e','s','t','5','.','T','X',0};
+    FILEIO_OBJECT myFile;
+    char data[10];
+    char expectedResults[] = "TEST5";
+    int dataRead;
+    const int dataCountExpected = 5;
+    
+    memset(data, 0, sizeof(data));
+    if(FILEIO_Open(&myFile, testFileName, FILEIO_OPEN_READ) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s -  Failed to find file.\r\n", name); return false;}
+
+    dataRead = FILEIO_Read(data, 1, sizeof(data), &myFile);
+   
+    if(dataRead != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
+    if(memcmp(data, expectedResults, strlen(expectedResults)-1) != 0){printf("TEST FAILED: %s - File data mismatch: expected(%s) actual(%s)\r\n", name, expectedResults, data); return false;} 
+    if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;} 
+
+    return true;
+}
+
+bool WindowsLFNBasenameUppercaseFullExtensionLowercase(void){  
+    const char name[] = "WindowsLFNBasenameUppercaseFullExtensionLowercase";
+    const uint16_t testFileName[] = {'T','E','S','T','1','2','3','4','.','t','x','t',0};
+    FILEIO_OBJECT myFile;
+    char data[10];
+    char expectedResults[] = "TEST1234";
+    int dataRead;
+    const int dataCountExpected = 8;
+    
+    memset(data, 0, sizeof(data));
+    if(FILEIO_Open(&myFile, testFileName, FILEIO_OPEN_READ) != FILEIO_RESULT_SUCCESS){printf("TEST FAILED: %s -  Failed to find file.\r\n", name); return false;}
+
+    dataRead = FILEIO_Read(data, 1, sizeof(data), &myFile);
+   
+    if(dataRead != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
+    if(memcmp(data, expectedResults, strlen(expectedResults)-1) != 0){printf("TEST FAILED: %s - File data mismatch: expected(%s) actual(%s)\r\n", name, expectedResults, data); return false;} 
+    if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;} 
+
+    return true;
+}
+
 typedef bool (*TEST_FUNCTION)(void);
 TEST_FUNCTION tests[]={
     &CreateFileInRoot,
@@ -376,13 +502,22 @@ TEST_FUNCTION tests[]={
     &CreateMultipleDirectoriesAtOnce
 };
 
+TEST_FUNCTION windowsSpecificTests[]={
+    &WindowsLFNBasenameUppercaseExtensionLowercase,
+    &WindowsLFNBasenameLowercaseExtensionUppercase,
+    &WindowsLFNBasenameLowercaseExtensionLowercase,
+    &WindowsLFNBasenameUppercaseExtensionLowercaseShort,
+    &WindowsLFNBasenameLowercaseExtensionUppercaseShort,
+    &WindowsLFNBasenameUppercaseFullExtensionLowercase
+};
+
 const uint32_t test_count = (sizeof(tests)/sizeof(TEST_FUNCTION));
+const uint32_t test_count_windows = (sizeof(windowsSpecificTests)/sizeof(TEST_FUNCTION));
 
 static int RunTests(struct EMULATED_DRIVE *drive){
     int test_index;
-    uint32_t passed;
-           
-    passed = 0;
+    uint32_t passed = 0;
+
     for(test_index=0; test_index < test_count; test_index++){
         if(TestSetup(drive) == true){
             passed += tests[test_index]();
@@ -393,9 +528,40 @@ static int RunTests(struct EMULATED_DRIVE *drive){
     return passed;    
 }
 
+/* These tests require a drive that has very specific Windows created files that
+ * have reserved bits set for short cutting LFNs for the files. Only drives with
+ * these files already on them will work correctly. The files on the drive must
+ * be:
+ *     NAME      |  FILE CONTENT
+ *  TEST1.txt    |    "TEST1"
+ *  test2.TXT    |    "TEST2"
+ *  test3.txt    |    "TEST3"
+ *  TEST4.tx     |    "TEST4"
+ *  test5.TX     |    "TEST5"
+ *  TEST1234.txt |   "TEST1234"
+ */
+static int RunWindowsSpecificTests(struct EMULATED_DRIVE *drive)
+{
+    int test_index;
+    uint32_t passed = 0;
+
+    for(test_index=0; test_index < test_count_windows; test_index++){
+        if(TestSetup(drive) == true){
+            passed += windowsSpecificTests[test_index]();
+            TestTearDown();
+        }
+    }
+
+    return passed;   
+}
+
 void RunFunctionalTests(void){
     int passed = RunTests(&DRV096);
     
     printf( "Functional tests: run: %i, passed: %i, failed: %i\r\n", test_count, passed, test_count-passed);
+    
+    passed = RunWindowsSpecificTests(&DRV_LFN_TESTS);
+    
+    printf( "Windows Specific LFN tests: run: %i, passed: %i, failed: %i\r\n", test_count_windows, passed, test_count_windows-passed);
 }
 
