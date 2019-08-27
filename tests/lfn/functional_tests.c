@@ -357,7 +357,6 @@ bool WindowsLFNBasenameUppercaseExtensionLowercase(void){
     const char name[] = "WindowsLFNBasenameUppercaseExtensionLowercase";
     const uint16_t testFileName[] = {'T','E','S','T','1','.','t','x','t',0};
     FILEIO_OBJECT myFile;
-    FILEIO_SEARCH_RECORD searchRecord;
     char data[10];
     char expectedResults[] = "TEST1";
     int dataRead;
@@ -368,7 +367,7 @@ bool WindowsLFNBasenameUppercaseExtensionLowercase(void){
 
     dataRead = FILEIO_Read(data, 1, sizeof(data), &myFile);
    
-    if(FILEIO_Read(data, 1, sizeof(data), &myFile) != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
+    if(dataRead != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
     if(memcmp(data, expectedResults, strlen(expectedResults)-1) != 0){printf("TEST FAILED: %s - File data mismatch: expected(%s) actual(%s)\r\n", name, expectedResults, data); return false;} 
     if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;} 
 
@@ -379,7 +378,6 @@ bool WindowsLFNBasenameLowercaseExtensionUppercase(void){
     const char name[] = "WindowsLFNBasenameLowercaseExtensionUppercase";
     const uint16_t testFileName[] = {'t','e','s','t','2','.','T','X','T',0};
     FILEIO_OBJECT myFile;
-    FILEIO_SEARCH_RECORD searchRecord;
     char data[10];
     char expectedResults[] = "TEST2";
     int dataRead;
@@ -390,7 +388,7 @@ bool WindowsLFNBasenameLowercaseExtensionUppercase(void){
 
     dataRead = FILEIO_Read(data, 1, sizeof(data), &myFile);
    
-    if(FILEIO_Read(data, 1, sizeof(data), &myFile) != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
+    if(dataRead != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
     if(memcmp(data, expectedResults, strlen(expectedResults)-1) != 0){printf("TEST FAILED: %s - File data mismatch: expected(%s) actual(%s)\r\n", name, expectedResults, data); return false;} 
     if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;} 
 
@@ -401,7 +399,6 @@ bool WindowsLFNBasenameLowercaseExtensionLowercase(void){
     const char name[] = "WindowsLFNBasenameLowercaseExtensionLowercase";
     const uint16_t testFileName[] = {'t','e','s','t','3','.','t','x','t',0};
     FILEIO_OBJECT myFile;
-    FILEIO_SEARCH_RECORD searchRecord;
     char data[10];
     char expectedResults[] = "TEST3";
     int dataRead;
@@ -412,7 +409,7 @@ bool WindowsLFNBasenameLowercaseExtensionLowercase(void){
 
     dataRead = FILEIO_Read(data, 1, sizeof(data), &myFile);
    
-    if(FILEIO_Read(data, 1, sizeof(data), &myFile) != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
+    if(dataRead != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
     if(memcmp(data, expectedResults, strlen(expectedResults)-1) != 0){printf("TEST FAILED: %s - File data mismatch: expected(%s) actual(%s)\r\n", name, expectedResults, data); return false;} 
     if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;} 
 
@@ -423,7 +420,6 @@ bool WindowsLFNBasenameUppercaseExtensionLowercaseShort(void){
     const char name[] = "WindowsLFNBasenameUppercaseExtensionLowercaseShort";
     const uint16_t testFileName[] = {'T','E','S','T','4','.','t','x',0};
     FILEIO_OBJECT myFile;
-    FILEIO_SEARCH_RECORD searchRecord;
     char data[10];
     char expectedResults[] = "TEST4";
     int dataRead;
@@ -434,7 +430,7 @@ bool WindowsLFNBasenameUppercaseExtensionLowercaseShort(void){
 
     dataRead = FILEIO_Read(data, 1, sizeof(data), &myFile);
    
-    if(FILEIO_Read(data, 1, sizeof(data), &myFile) != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
+    if(dataRead != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
     if(memcmp(data, expectedResults, strlen(expectedResults)-1) != 0){printf("TEST FAILED: %s - File data mismatch: expected(%s) actual(%s)\r\n", name, expectedResults, data); return false;} 
     if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;} 
 
@@ -445,7 +441,6 @@ bool WindowsLFNBasenameLowercaseExtensionUppercaseShort(void){
     const char name[] = "WindowsLFNBasenameLowercaseExtensionUppercaseShort";
     const uint16_t testFileName[] = {'t','e','s','t','5','.','T','X',0};
     FILEIO_OBJECT myFile;
-    FILEIO_SEARCH_RECORD searchRecord;
     char data[10];
     char expectedResults[] = "TEST5";
     int dataRead;
@@ -456,7 +451,7 @@ bool WindowsLFNBasenameLowercaseExtensionUppercaseShort(void){
 
     dataRead = FILEIO_Read(data, 1, sizeof(data), &myFile);
    
-    if(FILEIO_Read(data, 1, sizeof(data), &myFile) != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
+    if(dataRead != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
     if(memcmp(data, expectedResults, strlen(expectedResults)-1) != 0){printf("TEST FAILED: %s - File data mismatch: expected(%s) actual(%s)\r\n", name, expectedResults, data); return false;} 
     if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;} 
 
@@ -467,7 +462,6 @@ bool WindowsLFNBasenameUppercaseFullExtensionLowercase(void){
     const char name[] = "WindowsLFNBasenameUppercaseFullExtensionLowercase";
     const uint16_t testFileName[] = {'T','E','S','T','1','2','3','4','.','t','x','t',0};
     FILEIO_OBJECT myFile;
-    FILEIO_SEARCH_RECORD searchRecord;
     char data[10];
     char expectedResults[] = "TEST1234";
     int dataRead;
@@ -478,7 +472,7 @@ bool WindowsLFNBasenameUppercaseFullExtensionLowercase(void){
 
     dataRead = FILEIO_Read(data, 1, sizeof(data), &myFile);
    
-    if(FILEIO_Read(data, 1, sizeof(data), &myFile) != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
+    if(dataRead != dataCountExpected){printf("TEST FAILED: %s - incorrect amount of data read: expected(%d) actual(%d)\r\n", name, dataRead, dataCountExpected); return false;} 
     if(memcmp(data, expectedResults, strlen(expectedResults)-1) != 0){printf("TEST FAILED: %s - File data mismatch: expected(%s) actual(%s)\r\n", name, expectedResults, data); return false;} 
     if(FILEIO_Close(&myFile) != FILEIO_RESULT_SUCCESS) {printf("TEST FAILED: %s\r\n", name); return false;} 
 
