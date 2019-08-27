@@ -112,6 +112,7 @@
         <itemPath>DRV095.c</itemPath>
         <itemPath>DRV096.c</itemPath>
         <itemPath>DRV097.c</itemPath>
+        <itemPath>DRV_LFN_TESTS.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="fileio" projectFiles="true">
         <itemPath>../../src/fileio_lfn.c</itemPath>
@@ -344,6 +345,8 @@
       <item path="DRV096.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="DRV097.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV_LFN_TESTS.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="drive_list.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -581,6 +584,8 @@
       <item path="DRV096.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="DRV097.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="DRV_LFN_TESTS.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="drive_list.h" ex="false" tool="3" flavor2="0">
       </item>

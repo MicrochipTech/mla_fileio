@@ -118,6 +118,7 @@ extern struct EMULATED_DRIVE DRV094;
 extern struct EMULATED_DRIVE DRV095;
 extern struct EMULATED_DRIVE DRV096;
 extern struct EMULATED_DRIVE DRV097;
+extern struct EMULATED_DRIVE DRV_LFN_TESTS;
 
 static struct EMULATED_DRIVE *drives[] = {
     &DRV001,
@@ -212,7 +213,8 @@ static struct EMULATED_DRIVE *drives[] = {
     &DRV094,
     &DRV095,
     &DRV096,
-    &DRV097
+    &DRV097,
+    &DRV_LFN_TESTS
 };
 
 #endif /* DRIVE_LIST_H */
